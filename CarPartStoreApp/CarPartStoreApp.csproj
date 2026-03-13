@@ -1,0 +1,121 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.4" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="10.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Resources\Strings.en.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="resources\Strings.tr.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Views\MainWindow.xaml.cs" DependentUpon="Views\MainWindow.xaml">
+            <SubType>Code</SubType>
+        </Compile>
+    <Compile Update="Views\PartDialog.xaml.cs" DependentUpon="Views\PartDialog.xaml">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="App.xaml.cs" DependentUpon="App.xaml">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="ViewModels\MainWindowViewModel.cs" DependentUpon="Views\MainWindow.xaml">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="ViewModels\PartDialogViewModel.cs" DependentUpon="Views\PartDialog.xaml">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Models\CarPart.cs" DependentUpon="ViewModels\MainWindowViewModel.cs; ViewModels\PartDialogViewModel.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Models\Category.cs" DependentUpon="ViewModels\MainWindowViewModel.cs; ViewModels\PartDialogViewModel.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Data\DatabaseConfig.cs" DependentUpon="Models\CarPart.cs; Models\Category.cs; Services\SqliteDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Data\DatabaseInitializer.cs" DependentUpon="Data\DatabaseConfig.cs; Services\SqliteDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Services\SqliteDataService.cs" DependentUpon="Models\CarPart.cs; Models\Category.cs; Data\DatabaseConfig.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Services\IDataService.cs" DependentUpon="Services\SqliteDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Localization\ResourceKeys.cs" DependentUpon="Views\MainWindow.xaml; Views\PartDialog.xaml">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Localization\ILocalizationService.cs" DependentUpon="Localization\ResourceKeys.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Localization\LocalizationService.cs" DependentUpon="Localization\ILocalizationService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Localization\LanguageResources.cs" DependentUpon="Localization\ILocalizationService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Data\AppSettings.cs" DependentUpon="App.xaml.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Services\ServiceContainer.cs" DependentUpon="Data\AppSettings.cs; Localization\LocalizationService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Controllers\PartsController.cs" DependentUpon="Models\CarPart.cs; Models\Category.cs; Services\SqliteDataService.cs; Services\IDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controllers\CategoriesController.cs" DependentUpon="Models\Category.cs; Services\SqliteDataService.cs; Services\IDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="DTOs\CarPartDto.cs" DependentUpon="Controllers\PartsController.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="DTOs\CategoryDto.cs" DependentUpon="Controllers\CategoriesController.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Services\EmbeddedApiServer.cs" DependentUpon="Controllers\PartsController.cs; Controllers\CategoriesController.cs">
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+</Project>

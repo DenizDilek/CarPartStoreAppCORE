@@ -1,0 +1,98 @@
+<Window x:Class="CarPartStoreApp.Views.PartDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding DialogTitleAdd}"
+        Height="650"
+        Width="700"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelPartNumber}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.PartNumber}" Width="350" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelName}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.Name}" Width="350" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelDescription}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.Description}" Width="350" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelCategory}" Width="120" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding Categories}"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding Part.CategoryId}"
+                      Width="350" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelCostPrice}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.CostPrice, StringFormat='F2'}" Width="150" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelRetailPrice}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.RetailPrice, StringFormat='F2'}" Width="150" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelStockQuantity}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.StockQuantity}" Width="150" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="7" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelLocation}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.Location}" Width="350" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="8" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="{Binding LabelSupplier}" Width="120" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Part.Supplier}" Width="350" Height="25" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Image Section -->
+        <StackPanel Grid.Row="9" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="{Binding LabelImage}" Margin="0,0,5,0"/>
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Background="White" Width="200" Height="150" HorizontalAlignment="Left">
+                    <Image x:Name="PartImage" Source="{Binding PartImageSource}" Stretch="Uniform" Margin="5"/>
+                </Border>
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                    <Button Content="{Binding ButtonUploadImage}" Width="120" Height="30" Margin="0,0,5,0" Click="UploadImage_Click" ToolTip="{Binding ToolTipImage}"/>
+                    <Button Content="{Binding ButtonRemoveImage}" Width="120" Height="30" Margin="0,0,5,0" Click="RemoveImage_Click" Visibility="{Binding RemoveImageVisibility}"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="{Binding ButtonSave}" Width="100" Height="30" Margin="0,0,10,0" Click="Save_Click" IsDefault="True"/>
+            <Button Content="{Binding ButtonCancel}" Width="100" Height="30" Margin="0,0,10,0" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

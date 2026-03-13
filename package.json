@@ -1,0 +1,24 @@
+{
+  "name": "car-part-store",
+  "version": "1.0.0",
+  "description": "Car Part Store - WPF Desktop App + React Web App",
+  "private": true,
+  "scripts": {
+    "dev:wpf": "cd CarPartStoreApp && dotnet run",
+    "dev:web": "cd CarPartStoreWebApp && npm run dev",
+    "dev": "echo 'Run both apps in separate terminals:' && echo '  Terminal 1: npm run dev:wpf' && echo '  Terminal 2: npm run dev:web' && echo '' && echo 'Or use VSCode split terminal (Ctrl+Shift+5) and run each command in a pane.'",
+    "install:all": "cd CarPartStoreWebApp && npm install",
+    "build:wpf": "cd CarPartStoreApp && dotnet build",
+    "build:web": "cd CarPartStoreWebApp && npm run build",
+    "build:all": "npm run build:wpf && npm run build:web"
+  },
+  "keywords": [
+    "car-parts",
+    "inventory",
+    "wpf",
+    "react",
+    "vite"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,76 @@
+{
+  "MainWindow": {
+    "Title": "Otomobil Parçası Depo Yönetimi",
+    "MenuFile": "_Dosya",
+    "MenuAddPart": "_Yeni Parça Ekle...",
+    "MenuExit": "_Çıkış",
+    "MenuEdit": "_Düzenle",
+    "MenuDeletePart": "_Seçili Parçayı Sil",
+    "MenuHelp": "_Yardım",
+    "MenuAbout": "_Hakkında",
+    "MenuLanguage": "_Dil",
+    "MenuLanguageEnglish": "İngilizce",
+    "MenuLanguageTurkish": "Türkçe",
+    "ContextMenuEdit": "Parçayı Düzenle",
+    "ContextMenuDelete": "Parçayı Sil"
+  },
+  "SearchAndFilter": {
+    "GroupBox": "Ara ve Filtrele",
+    "LabelSearch": "Ara:",
+    "HintSearchText": "Parça numarası, ad, açıklama veya tedarikçiye göre ara",
+    "LabelCategory": "Kategori:",
+    "HintCategoryText": "Kategoriye göre filtrele"
+  },
+  "PartsInventory": {
+    "GroupBox": "Parça Envanteri",
+    "ColumnPartNumber": "Parça #",
+    "ColumnName": "Ad",
+    "ColumnDescription": "Açıklama",
+    "ColumnCategory": "Kategori",
+    "ColumnCost": "Maliyet",
+    "ColumnRetail": "Satış",
+    "ColumnStock": "Stok",
+    "ColumnLocation": "Konum",
+    "ColumnSupplier": "Tedarikçi",
+    "ColumnImage": "Görsel"
+  },
+  "PartDialog": {
+    "TitleAdd": "Yeni Parça Ekle",
+    "TitleEdit": "Parçayı Düzenle",
+    "LabelPartNumber": "Parça Numarası:",
+    "LabelName": "Ad:",
+    "LabelDescription": "Açıklama:",
+    "LabelCategory": "Kategori:",
+    "LabelCostPrice": "Maliyet Fiyatı:",
+    "LabelRetailPrice": "Satış Fiyatı:",
+    "LabelStockQuantity": "Stok Miktarı:",
+    "LabelLocation": "Konum:",
+    "LabelSupplier": "Tedarikçi:",
+    "LabelImage": "Görsel:",
+    "ButtonSave": "Kaydet",
+    "ButtonCancel": "İptal",
+    "ButtonUploadImage": "Görsel Yükle...",
+    "ButtonRemoveImage": "Görseli Kaldır",
+    "ToolTipPartNumber": "Örnek: ENG-001, BRK-001, SUS-001",
+    "ToolTipName": "Örnek: Yağ Filtresi, Fren Balataları, Buji",
+    "ToolTipDescription": "Örnek: Çoğu motor için standart yağ filtresi",
+    "ToolTipCostPrice": "Örnek: Maliyet fiyatı için 5.99",
+    "ToolTipRetailPrice": "Örnek: Satış fiyatı için 12.99",
+    "ToolTipStockQuantity": "Örnek: Stok miktarı için 50",
+    "ToolTipLocation": "Örnek: Koridor 1, Raf 2",
+    "ToolTipSupplier": "Örnek: AutoParts Inc, BrakeMaster",
+    "ToolTipImage": "Bu parça için ürün görseli ekle"
+  },
+  "Messages": {
+    "DeleteConfirmation": "'{0}' parçasını silmek istediğinizden emin misiniz?",
+    "DeleteConfirmationTitle": "Silme Onayı",
+    "ValidationErrorPartNumber": "Lütfen bir parça numarası girin.",
+    "ValidationErrorName": "Lütfen bir parça adı girin.",
+    "ValidationErrorTitle": "Doğrulama Hatası",
+    "AboutText": "Otomobil Parçası Depo Yönetim Sistemi\n\nSürüm 1.0\n\nOtomobil parçası envanterini yönetmek için bir WPF uygulaması.",
+    "AboutTitle": "CarParStorageApp Hakkında"
+  },
+  "Common": {
+    "Uncategorized": "Kategorisiz"
+  }
+}
