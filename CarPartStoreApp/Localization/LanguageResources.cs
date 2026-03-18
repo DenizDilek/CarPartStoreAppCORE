@@ -10,7 +10,7 @@ namespace CarPartStoreApp.Localization
     /// </summary>
     public class LanguageResources : INotifyPropertyChanged
     {
-        private Dictionary<string, string> _currentResources;
+        private Dictionary<string, string> _currentResources = new();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

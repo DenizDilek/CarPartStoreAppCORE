@@ -3,6 +3,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CarPartStoreApp">
     <Application.Resources>
+        <!-- Global Dark Theme Color Brushes -->
+        <SolidColorBrush x:Key="HeaderBrush" Color="#2D3748"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#4A5568"/>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#1A202C"/>
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#2D3748"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#4A5568"/>
+        <SolidColorBrush x:Key="HoverBrush" Color="#3D4654"/>
+        <SolidColorBrush x:Key="PressedBrush" Color="#4A5568"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#E2E8F0"/>
+        <SolidColorBrush x:Key="MutedTextBrush" Color="#A0AEC0"/>
+        <SolidColorBrush x:Key="PrimaryAccentBrush" Color="#3182CE"/>
+        <SolidColorBrush x:Key="PrimaryAccentHoverBrush" Color="#4299E1"/>
+        <SolidColorBrush x:Key="DisabledBrush" Color="#4A5568"/>
+        <SolidColorBrush x:Key="DisabledTextBrush" Color="#A0AEC0"/>
 
+        <!-- Dark Theme Color Values -->
+        <Color x:Key="HeaderColor">#2D3748</Color>
+        <Color x:Key="AccentColor">#4A5568</Color>
+        <Color x:Key="BackgroundColor">#1A202C</Color>
+        <Color x:Key="CardBackgroundColor">#2D3748</Color>
+        <Color x:Key="BorderColor">#4A5568</Color>
+        <Color x:Key="HoverColor">#3D4654</Color>
+        <Color x:Key="TextColor">#E2E8F0</Color>
+        <Color x:Key="MutedTextColor">#A0AEC0</Color>
+        <Color x:Key="PrimaryAccentColor">#3182CE</Color>
+        <Color x:Key="PrimaryAccentHoverColor">#4299E1</Color>
+        <Color x:Key="AlternateRowColor">#232D3D</Color>
+
+        <!-- Global Text Colors -->
+        <SolidColorBrush x:Key="ForegroundPrimary" Color="#E2E8F0"/>
+        <SolidColorBrush x:Key="ForegroundSecondary" Color="#A0AEC0"/>
+        <SolidColorBrush x:Key="ForegroundMuted" Color="#718096"/>
+        <SolidColorBrush x:Key="ForegroundAccent" Color="#3182CE"/>
+
+        <!-- Global Background Colors -->
+        <SolidColorBrush x:Key="BackgroundPrimary" Color="#1A202C"/>
+        <SolidColorBrush x:Key="BackgroundSecondary" Color="#2D3748"/>
+        <SolidColorBrush x:Key="BackgroundTertiary" Color="#232D3D"/>
+        <SolidColorBrush x:Key="BackgroundHover" Color="#3D4654"/>
+
+        <!-- Global Border Colors -->
+        <SolidColorBrush x:Key="BorderPrimary" Color="#4A5568"/>
+        <SolidColorBrush x:Key="BorderSecondary" Color="#2D3748"/>
+
+        <!-- Error and Status Colors -->
+        <SolidColorBrush x:Key="ErrorColor" Color="#E53E3E"/>
+        <SolidColorBrush x:Key="SuccessColor" Color="#48BB78"/>
+        <SolidColorBrush x:Key="WarningColor" Color="#ECC94B"/>
     </Application.Resources>
 </Application>

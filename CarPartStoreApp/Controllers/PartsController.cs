@@ -169,6 +169,8 @@ namespace CarPartStoreApp.Controllers
                 Location = part.Location,
                 Supplier = part.Supplier,
                 ImagePath = part.ImagePath,
+                Model = part.Model,
+                ReleaseDate = part.ReleaseDate,
                 CreatedDate = part.CreatedDate.ToString("O"),
                 LastUpdated = part.LastUpdated?.ToString("O")
             };
@@ -180,14 +182,16 @@ namespace CarPartStoreApp.Controllers
             {
                 PartNumber = dto.PartNumber,
                 Name = dto.Name,
-                Description = dto.Description,
+                Description = dto.Description ?? string.Empty,
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
                 RetailPrice = dto.RetailPrice,
                 StockQuantity = dto.StockQuantity,
-                Location = dto.Location,
-                Supplier = dto.Supplier,
-                ImagePath = dto.ImagePath,
+                Location = dto.Location ?? string.Empty,
+                Supplier = dto.Supplier ?? string.Empty,
+                ImagePath = dto.ImagePath ?? string.Empty,
+                Model = dto.Model,
+                ReleaseDate = dto.ReleaseDate,
                 CreatedDate = DateTime.Now
             };
         }
@@ -198,14 +202,16 @@ namespace CarPartStoreApp.Controllers
             {
                 PartNumber = dto.PartNumber,
                 Name = dto.Name,
-                Description = dto.Description,
+                Description = dto.Description ?? string.Empty,
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
                 RetailPrice = dto.RetailPrice,
                 StockQuantity = dto.StockQuantity,
-                Location = dto.Location,
-                Supplier = dto.Supplier,
-                ImagePath = dto.ImagePath
+                Location = dto.Location ?? string.Empty,
+                Supplier = dto.Supplier ?? string.Empty,
+                ImagePath = dto.ImagePath ?? string.Empty,
+                Model = dto.Model,
+                ReleaseDate = dto.ReleaseDate
             };
         }
     }

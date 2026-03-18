@@ -20,6 +20,8 @@ namespace CarPartStoreApp.Models
         private string _location = string.Empty;
         private string _supplier = string.Empty;
         private string _imagePath = string.Empty;
+        private string? _model = string.Empty;
+        private int? _releaseYear;
         private DateTime _createdDate = DateTime.Now;
         private DateTime? _lastUpdated;
 
@@ -97,6 +99,18 @@ namespace CarPartStoreApp.Models
         {
             get => _imagePath;
             set => SetProperty(ref _imagePath, value);
+        }
+
+        public string? Model
+        {
+            get => _model;
+            set => SetProperty(ref _model, value);
+        }
+
+        public int? ReleaseDate
+        {
+            get => _releaseYear;
+            set => SetProperty(ref _releaseYear, value);
         }
 
         public DateTime CreatedDate

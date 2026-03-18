@@ -3,6 +3,7 @@
     "Title": "Otomobil Parçası Depo Yönetimi",
     "MenuFile": "_Dosya",
     "MenuAddPart": "_Yeni Parça Ekle...",
+    "MenuTest": "_Test INSERT...",
     "MenuExit": "_Çıkış",
     "MenuEdit": "_Düzenle",
     "MenuDeletePart": "_Seçili Parçayı Sil",
@@ -19,7 +20,14 @@
     "LabelSearch": "Ara:",
     "HintSearchText": "Parça numarası, ad, açıklama veya tedarikçiye göre ara",
     "LabelCategory": "Kategori:",
-    "HintCategoryText": "Kategoriye göre filtrele"
+    "HintCategoryText": "Kategoriye göre filtrele",
+    "LabelDatabase": "Veritabanı:",
+    "HintDatabaseText": "Veritabanı kaynağını seçin (Yerel veya Bulut)",
+    "DatabaseLocal": "Yerel",
+    "DatabaseCloud": "Bulut",
+    "DatabaseSwitching": "{0} veritabanına geçiliyor...",
+    "DatabaseSwitchSuccess": "Başarıyla {0} veritabanına geçildi",
+    "DatabaseSwitchError": "{0} veritabanına geçilemedi: {1}"
   },
   "PartsInventory": {
     "GroupBox": "Parça Envanteri",
@@ -32,7 +40,9 @@
     "ColumnStock": "Stok",
     "ColumnLocation": "Konum",
     "ColumnSupplier": "Tedarikçi",
-    "ColumnImage": "Görsel"
+    "ColumnImage": "Resim",
+    "ColumnModel": "Model",
+    "ColumnReleaseDate": "Çıkış Tarihi"
   },
   "PartDialog": {
     "TitleAdd": "Yeni Parça Ekle",
@@ -46,11 +56,13 @@
     "LabelStockQuantity": "Stok Miktarı:",
     "LabelLocation": "Konum:",
     "LabelSupplier": "Tedarikçi:",
-    "LabelImage": "Görsel:",
+    "LabelImage": "Resim:",
+    "LabelModel": "Model:",
+    "LabelReleaseDate": "Çıkış Tarihi:",
     "ButtonSave": "Kaydet",
     "ButtonCancel": "İptal",
-    "ButtonUploadImage": "Görsel Yükle...",
-    "ButtonRemoveImage": "Görseli Kaldır",
+    "ButtonUploadImage": "Resim Yükle...",
+    "ButtonRemoveImage": "Resimi Kaldır",
     "ToolTipPartNumber": "Örnek: ENG-001, BRK-001, SUS-001",
     "ToolTipName": "Örnek: Yağ Filtresi, Fren Balataları, Buji",
     "ToolTipDescription": "Örnek: Çoğu motor için standart yağ filtresi",
@@ -59,7 +71,7 @@
     "ToolTipStockQuantity": "Örnek: Stok miktarı için 50",
     "ToolTipLocation": "Örnek: Koridor 1, Raf 2",
     "ToolTipSupplier": "Örnek: AutoParts Inc, BrakeMaster",
-    "ToolTipImage": "Bu parça için ürün görseli ekle"
+    "ToolTipImage": "Bu parça için ürün resmini ekle"
   },
   "Messages": {
     "DeleteConfirmation": "'{0}' parçasını silmek istediğinizden emin misiniz?",

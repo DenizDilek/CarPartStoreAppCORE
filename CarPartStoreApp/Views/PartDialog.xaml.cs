@@ -1,5 +1,8 @@
+using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CarPartStoreApp.Localization;
 using CarPartStoreApp.Models;
@@ -43,6 +46,8 @@ namespace CarPartStoreApp.Views
         public string LabelStockQuantity => this["PartDialog.LabelStockQuantity"];
         public string LabelLocation => this["PartDialog.LabelLocation"];
         public string LabelSupplier => this["PartDialog.LabelSupplier"];
+        public string LabelModel => this["PartDialog.LabelModel"];
+        public string LabelReleaseDate => this["PartDialog.LabelReleaseDate"];
         public string LabelImage => this["PartDialog.LabelImage"];
         public string ButtonSave => this["PartDialog.ButtonSave"];
         public string ButtonCancel => this["PartDialog.ButtonCancel"];
@@ -59,6 +64,9 @@ namespace CarPartStoreApp.Views
             _localization = localization ?? ServiceContainer.Resolve<ILocalizationService>();
             Categories = categories;
             DataContext = this;
+
+            // Enable drag-to-move on the title bar
+            TitleBar.MouseLeftButtonDown += (sender, e) => DragMove();
 
             if (existingPart != null)
             {
@@ -106,7 +114,7 @@ namespace CarPartStoreApp.Views
             Close();
         }
 
-        private void UploadImage_Click(object sender, RoutedEventArgs e)
+        private async void UploadImage_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -120,18 +128,44 @@ namespace CarPartStoreApp.Views
                 var sourceFileName = openFileDialog.FileName;
                 if (!string.IsNullOrWhiteSpace(sourceFileName))
                 {
-                    SaveImageToAppDirectory(sourceFileName);
+                    await UploadImageToCloudinaryAsync(sourceFileName);
                 }
             }
         }
 
-        private void RemoveImage_Click(object sender, RoutedEventArgs e)
+        private async void RemoveImage_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(_part.ImagePath))
             {
-                // Delete the existing image file
-                if (File.Exists(_part.ImagePath))
+                // Check if it's a Cloudinary URL
+                var imageService = ServiceContainer.GetService<IImageStorageService>();
+
+                if (imageService != null && _part.ImagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
+                    // Delete from Cloudinary
+                    try
+                    {
+                        Mouse.OverrideCursor = Cursors.Wait;
+                        await imageService.DeleteImageAsync(_part.ImagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Mouse.OverrideCursor = null;
+                        MessageBox.Show(
+                            $"Error deleting image from Cloudinary: {ex.Message}",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                        return;
+                    }
+                    finally
+                    {
+                        Mouse.OverrideCursor = null;
+                    }
+                }
+                else if (File.Exists(_part.ImagePath))
+                {
+                    // Delete local file
                     try
                     {
                         File.Delete(_part.ImagePath);
@@ -143,6 +177,7 @@ namespace CarPartStoreApp.Views
                             "Error",
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
+                        return;
                     }
                 }
 
@@ -156,6 +191,64 @@ namespace CarPartStoreApp.Views
             }
         }
 
+        /// <summary>
+        /// Uploads an image to Cloudinary or falls back to local storage
+        /// </summary>
+        private async Task UploadImageToCloudinaryAsync(string sourceFilePath)
+        {
+            try
+            {
+                // Check if Cloudinary is configured
+                var imageService = ServiceContainer.GetService<IImageStorageService>();
+                if (imageService == null)
+                {
+                    // Fall back to local storage if Cloudinary not configured
+                    SaveImageToAppDirectory(sourceFilePath);
+                    return;
+                }
+
+                // Validate part number before upload
+                if (string.IsNullOrWhiteSpace(_part.PartNumber))
+                {
+                    MessageBox.Show(
+                        "Please enter a Part Number before uploading an image.",
+                        "Part Number Required",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Show loading cursor during upload
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                // Upload to Cloudinary
+                var imageUrl = await imageService.UploadImageAsync(sourceFilePath, _part.PartNumber);
+
+                // Update the part's image path with Cloudinary URL
+                _part.ImagePath = imageUrl;
+
+                // Refresh UI
+                var temp = DataContext;
+                DataContext = null;
+                DataContext = temp;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error uploading image: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                // Reset cursor
+                Mouse.OverrideCursor = null;
+            }
+        }
+
+        /// <summary>
+        /// Saves an image to the local app directory (fallback when Cloudinary is not configured)
+        /// </summary>
         private void SaveImageToAppDirectory(string sourceFilePath)
         {
             try
@@ -196,8 +289,6 @@ namespace CarPartStoreApp.Views
                 var temp = DataContext;
                 DataContext = null;
                 DataContext = temp;
-
-                // Clear remaining OnPropertyChanged call below
             }
             catch (Exception ex)
             {
@@ -207,6 +298,24 @@ namespace CarPartStoreApp.Views
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
         }
     }
 }

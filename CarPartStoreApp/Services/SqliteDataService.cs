@@ -13,6 +13,19 @@ namespace CarPartStoreApp.Services
     /// </summary>
     public class SqliteDataService : IDataService
     {
+        /// <summary>
+        /// Gets the database type being used
+        /// </summary>
+        public string GetDatabaseType() => "SQLite (Local)";
+
+        /// <summary>
+        /// Enables or disables debug tracking for query/response logging
+        /// </summary>
+        public void EnableDebugTracking(bool enabled)
+        {
+            // SQLite doesn't support query tracking in this implementation
+            // This is a no-op for local SQLite
+        }
         public async Task<List<CarPart>> GetAllPartsAsync()
         {
             await Task.CompletedTask; // Keep method signature async
@@ -24,7 +37,7 @@ namespace CarPartStoreApp.Services
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
-                       p.CreatedDate, p.LastUpdated
+                       p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 ORDER BY p.Name
@@ -48,7 +61,7 @@ namespace CarPartStoreApp.Services
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
-                       p.CreatedDate, p.LastUpdated
+                       p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.Id = @Id
@@ -73,10 +86,10 @@ namespace CarPartStoreApp.Services
             command.CommandText = @"
                 INSERT INTO Parts (PartNumber, Name, Description, CategoryId,
                                    CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath,
-                                   CreatedDate, LastUpdated)
+                                   Model, ReleaseYear, CreatedDate, LastUpdated)
                 VALUES (@PartNumber, @Name, @Description, @CategoryId,
                         @CostPrice, @RetailPrice, @StockQuantity, @Location, @Supplier, @ImagePath,
-                        @CreatedDate, @LastUpdated);
+                        @Model, @ReleaseYear, @CreatedDate, @LastUpdated);
                 SELECT last_insert_rowid();
             ";
 
@@ -90,6 +103,8 @@ namespace CarPartStoreApp.Services
             command.Parameters.AddWithValue("@Location", part.Location);
             command.Parameters.AddWithValue("@Supplier", part.Supplier);
             command.Parameters.AddWithValue("@ImagePath", (object?)part.ImagePath ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Model", (object?)part.Model ?? DBNull.Value);
+            command.Parameters.AddWithValue("@ReleaseYear", (object?)part.ReleaseDate ?? DBNull.Value);
             command.Parameters.AddWithValue("@CreatedDate", part.CreatedDate);
             command.Parameters.AddWithValue("@LastUpdated", (object?)part.LastUpdated ?? DBNull.Value);
 
@@ -115,6 +130,8 @@ namespace CarPartStoreApp.Services
                     Location = @Location,
                     Supplier = @Supplier,
                     ImagePath = @ImagePath,
+                    Model = @Model,
+                    ReleaseYear = @ReleaseYear,
                     LastUpdated = @LastUpdated
                 WHERE Id = @Id
             ";
@@ -129,6 +146,8 @@ namespace CarPartStoreApp.Services
             command.Parameters.AddWithValue("@Location", part.Location);
             command.Parameters.AddWithValue("@Supplier", part.Supplier);
             command.Parameters.AddWithValue("@ImagePath", (object?)part.ImagePath ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Model", (object?)part.Model ?? DBNull.Value);
+            command.Parameters.AddWithValue("@ReleaseYear", (object?)part.ReleaseDate ?? DBNull.Value);
             command.Parameters.AddWithValue("@LastUpdated", DateTime.Now);
             command.Parameters.AddWithValue("@Id", part.Id);
 
@@ -205,7 +224,7 @@ namespace CarPartStoreApp.Services
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
-                       p.CreatedDate, p.LastUpdated
+                       p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.CategoryId = @CategoryId
@@ -233,7 +252,7 @@ namespace CarPartStoreApp.Services
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
-                       p.CreatedDate, p.LastUpdated
+                       p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.PartNumber LIKE @SearchTerm
@@ -255,9 +274,38 @@ namespace CarPartStoreApp.Services
 
         /// <summary>
         /// Maps a SQLite data reader to a CarPart object
+        /// Handles migration from old ReleaseDate TEXT column to new ReleaseYear INTEGER column
         /// </summary>
         private CarPart MapReaderToCarPart(SqliteDataReader reader)
         {
+            // Handle ReleaseYear/ReleaseDate column (migration compatibility)
+            int? releaseYear = null;
+            int releaseYearIndex = 13;
+
+            if (reader.IsDBNull(releaseYearIndex))
+            {
+                releaseYear = null;
+            }
+            else
+            {
+                // Check if the column is an INTEGER (new schema) or TEXT (old schema)
+                var columnType = reader.GetFieldType(releaseYearIndex);
+                if (columnType == typeof(string))
+                {
+                    // Old schema: Parse year from date string (e.g., "2024-01-15" -> 2024)
+                    var dateString = reader.GetString(releaseYearIndex);
+                    if (int.TryParse(dateString?.Substring(0, Math.Min(4, dateString?.Length ?? 0)), out var year))
+                    {
+                        releaseYear = year;
+                    }
+                }
+                else
+                {
+                    // New schema: Read as integer directly
+                    releaseYear = reader.GetInt32(releaseYearIndex);
+                }
+            }
+
             return new CarPart
             {
                 Id = reader.GetInt32(0),
@@ -272,8 +320,10 @@ namespace CarPartStoreApp.Services
                 Location = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
                 Supplier = reader.IsDBNull(10) ? string.Empty : reader.GetString(10),
                 ImagePath = reader.IsDBNull(11) ? string.Empty : reader.GetString(11),
-                CreatedDate = DateTime.Parse(reader.GetString(12)),
-                LastUpdated = reader.IsDBNull(13) ? (DateTime?)null : DateTime.Parse(reader.GetString(13))
+                Model = reader.IsDBNull(12) ? null : reader.GetString(12),
+                ReleaseDate = releaseYear,
+                CreatedDate = DateTime.Parse(reader.GetString(14)),
+                LastUpdated = reader.IsDBNull(15) ? (DateTime?)null : DateTime.Parse(reader.GetString(15))
             };
         }
 
