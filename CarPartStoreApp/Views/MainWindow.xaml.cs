@@ -3,6 +3,7 @@ using CarPartStoreApp.Localization;
 using CarPartStoreApp.Services;
 using CarPartStoreApp.ViewModels;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CarPartStoreApp;
 
@@ -20,6 +21,9 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _localization = localization;
+
+        // Enable drag-to-move on the title bar
+        TitleBar.MouseLeftButtonDown += (sender, e) => DragMove();
 
         // Initialize view model with dependencies
         var viewModel = new MainWindowViewModel(dataService, settings, localization);
@@ -47,7 +51,7 @@ public partial class MainWindow : Window
     {
         if (ViewModel == null) return;
 
-        if (PartsDataGrid.Columns.Count >= 10)
+        if (PartsDataGrid.Columns.Count >= 12)
         {
             PartsDataGrid.Columns[0].Header = ViewModel.ColumnPartNumber;
             PartsDataGrid.Columns[1].Header = ViewModel.ColumnName;
@@ -58,7 +62,9 @@ public partial class MainWindow : Window
             PartsDataGrid.Columns[6].Header = ViewModel.ColumnStock;
             PartsDataGrid.Columns[7].Header = ViewModel.ColumnLocation;
             PartsDataGrid.Columns[8].Header = ViewModel.ColumnSupplier;
-            PartsDataGrid.Columns[9].Header = ViewModel.ColumnImage;
+            PartsDataGrid.Columns[9].Header = ViewModel.ColumnModel;
+            PartsDataGrid.Columns[10].Header = ViewModel.ColumnReleaseDate;
+            PartsDataGrid.Columns[11].Header = ViewModel.ColumnImage;
         }
     }
 
@@ -74,5 +80,22 @@ public partial class MainWindow : Window
             _localization.GetString(ResourceKeys.MessageAboutTitle),
             MessageBoxButton.OK,
             MessageBoxImage.Information);
+    }
+
+    private void Minimize_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void Maximize_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState == WindowState.Maximized
+            ? WindowState.Normal
+            : WindowState.Maximized;
+    }
+
+    private void Close_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

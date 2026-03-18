@@ -6,7 +6,13 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
 // API base URL - connects to the WPF embedded API server
-const API_BASE_URL = 'http://localhost:5000/api';
+// Can be configured via environment variable VITE_API_URL
+const API_BASE_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : 'http://localhost:5000/api';
+
+// Log which API URL is being used
+console.log(`🔧 API Client initialized with base URL: ${API_BASE_URL}`);
 
 /**
  * Create and configure axios instance

@@ -1,12 +1,13 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using CarPartStoreApp.Models;
 
 namespace CarPartStoreApp.Data
 {
     /// <summary>
     /// Application settings manager
-    /// Persists user preferences including language selection
+    /// Persists user preferences including language selection and database type
     /// </summary>
     public class AppSettings
     {
@@ -17,6 +18,11 @@ namespace CarPartStoreApp.Data
         /// Gets or sets the current language code (e.g., "en", "tr")
         /// </summary>
         public string CurrentLanguage { get; set; } = "en";
+
+        /// <summary>
+        /// Gets or sets the selected database type (Local or Cloud)
+        /// </summary>
+        public DatabaseType SelectedDatabase { get; set; } = DatabaseType.Local;
 
         /// <summary>
         /// Gets or sets the last updated timestamp

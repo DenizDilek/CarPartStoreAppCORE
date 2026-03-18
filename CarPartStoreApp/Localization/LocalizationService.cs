@@ -18,7 +18,7 @@ namespace CarPartStoreApp.Localization
         /// <summary>
         /// Gets current language code
         /// </summary>
-        public string CurrentLanguage { get; private set; }
+        public string CurrentLanguage { get; private set; } = "en";
 
         /// <summary>
         /// Gets current language resources

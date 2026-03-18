@@ -10,7 +10,12 @@
     "install:all": "cd CarPartStoreWebApp && npm install",
     "build:wpf": "cd CarPartStoreApp && dotnet build",
     "build:web": "cd CarPartStoreWebApp && npm run build",
-    "build:all": "npm run build:wpf && npm run build:web"
+    "build:all": "npm run build:wpf && npm run build:web",
+    "setup:turso": "powershell -ExecutionPolicy Bypass -File scripts/setup-turso.ps1",
+    "fix:env": "powershell -ExecutionPolicy Bypass -File scripts/fix-env.ps1",
+    "fix:env:wsl": "wsl bash scripts/fix-env.sh",
+    "check:db": "powershell -ExecutionPolicy Bypass -File scripts/check-db-config.ps1",
+    "check:db:wsl": "wsl bash scripts/check-db-config.sh"
   },
   "keywords": [
     "car-parts",
@@ -20,5 +25,8 @@
     "vite"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
 }

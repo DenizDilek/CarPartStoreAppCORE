@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CarPartStoreApp.Localization;
 using CarPartStoreApp.Models;
@@ -43,6 +44,8 @@ namespace CarPartStoreApp.Views
         public string LabelStockQuantity => this["PartDialog.LabelStockQuantity"];
         public string LabelLocation => this["PartDialog.LabelLocation"];
         public string LabelSupplier => this["PartDialog.LabelSupplier"];
+        public string LabelModel => this["PartDialog.LabelModel"];
+        public string LabelReleaseDate => this["PartDialog.LabelReleaseDate"];
         public string LabelImage => this["PartDialog.LabelImage"];
         public string ButtonSave => this["PartDialog.ButtonSave"];
         public string ButtonCancel => this["PartDialog.ButtonCancel"];
@@ -59,6 +62,9 @@ namespace CarPartStoreApp.Views
             _localization = localization ?? ServiceContainer.Resolve<ILocalizationService>();
             Categories = categories;
             DataContext = this;
+
+            // Enable drag-to-move on the title bar
+            TitleBar.MouseLeftButtonDown += (sender, e) => DragMove();
 
             if (existingPart != null)
             {
@@ -207,6 +213,24 @@ namespace CarPartStoreApp.Views
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
         }
     }
 }

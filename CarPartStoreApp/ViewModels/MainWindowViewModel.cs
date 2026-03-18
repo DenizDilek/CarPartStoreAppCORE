@@ -18,13 +18,14 @@ namespace CarPartStoreApp.ViewModels
     /// </summary>
     public class MainWindowViewModel : ObservableObject
     {
-        private readonly IDataService _dataService;
+        private IDataService _dataService;
         private readonly AppSettings _settings;
         private readonly ILocalizationService _localization;
         private string _searchTerm = string.Empty;
         private CarPart? _selectedPart;
         private Category? _selectedCategory;
-        private readonly Services.EmbeddedApiServer _apiServer;
+        private DatabaseType _selectedDatabase;
+        private readonly Services.EmbeddedApiServer? _apiServer;
 
         public MainWindowViewModel(IDataService dataService, AppSettings settings, ILocalizationService localization, EmbeddedApiServer? apiServer = null)
         {
@@ -32,20 +33,29 @@ namespace CarPartStoreApp.ViewModels
             _settings = settings;
             _localization = localization;
             _apiServer = apiServer ?? ServiceContainer.GetService<EmbeddedApiServer>();
+            _selectedDatabase = settings.SelectedDatabase;
 
             Parts = new ObservableCollection<CarPart>();
             Categories = new ObservableCollection<Category>();
+            DatabaseTypes = new ObservableCollection<DatabaseType>
+            {
+                DatabaseType.Local,
+                DatabaseType.Cloud
+            };
 
             AddPartCommand = new RelayCommand(AddPart);
             EditPartCommand = new RelayCommand(EditPart, CanEditPart);
             DeletePartCommand = new RelayCommand(DeletePart, CanDeletePart);
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+            ChangeDatabaseCommand = new RelayCommand(ChangeDatabaseAsync);
+            TestPartCommand = new RelayCommand(TestPartInsert);
         }
 
         #region Collections
 
         public ObservableCollection<CarPart> Parts { get; }
         public ObservableCollection<Category> Categories { get; }
+        public ObservableCollection<DatabaseType> DatabaseTypes { get; }
 
         #endregion
 
@@ -82,6 +92,24 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the selected database type (Local or Cloud)
+        /// When changed, switches the data source and refreshes data
+        /// </summary>
+        public DatabaseType SelectedDatabase
+        {
+            get => _selectedDatabase;
+            set
+            {
+                if (SetProperty(ref _selectedDatabase, value))
+                {
+                    _settings.SelectedDatabase = value;
+                    _settings.Save();
+                    _ = ChangeDatabaseAsync(value);
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the current language code
         /// </summary>
         public string CurrentLanguage => _localization.CurrentLanguage;
@@ -89,12 +117,12 @@ namespace CarPartStoreApp.ViewModels
         /// <summary>
         /// Gets the API server status
         /// </summary>
-        public string ApiServerStatus => _apiServer.IsRunning ? "Running" : "Stopped";
+        public string ApiServerStatus => _apiServer?.IsRunning == true ? "Running" : "Stopped";
 
         /// <summary>
         /// Gets the API server base URL
         /// </summary>
-        public string ApiServerUrl => _apiServer.BaseUrl;
+        public string ApiServerUrl => _apiServer?.BaseUrl ?? "Not available";
 
         /// <summary>
         /// Gets a localized string by key
@@ -115,6 +143,8 @@ namespace CarPartStoreApp.ViewModels
         public ICommand EditPartCommand { get; }
         public ICommand DeletePartCommand { get; }
         public ICommand ChangeLanguageCommand { get; }
+        public ICommand ChangeDatabaseCommand { get; }
+        public ICommand TestPartCommand { get; }
 
         #endregion
 
@@ -122,6 +152,7 @@ namespace CarPartStoreApp.ViewModels
 
         public string MenuFile => this["MainWindow.MenuFile"];
         public string MenuAddPart => this["MainWindow.MenuAddPart"];
+        public string MenuTest => this["MainWindow.MenuTest"];
         public string MenuExit => this["MainWindow.MenuExit"];
         public string MenuEdit => this["MainWindow.MenuEdit"];
         public string MenuDeletePart => this["MainWindow.MenuDeletePart"];
@@ -142,6 +173,18 @@ namespace CarPartStoreApp.ViewModels
         public string SearchHint => this["SearchAndFilter.HintSearchText"];
         public string CategoryLabel => this["SearchAndFilter.LabelCategory"];
         public string CategoryHint => this["SearchAndFilter.HintCategoryText"];
+        public string DatabaseLabel => this["SearchAndFilter.LabelDatabase"];
+        public string DatabaseHint => this["SearchAndFilter.HintDatabaseText"];
+
+        /// <summary>
+        /// Gets display name for Local database
+        /// </summary>
+        public string DatabaseLocal => this["SearchAndFilter.DatabaseLocal"];
+
+        /// <summary>
+        /// Gets display name for Cloud database
+        /// </summary>
+        public string DatabaseCloud => this["SearchAndFilter.DatabaseCloud"];
 
         #endregion
 
@@ -157,6 +200,8 @@ namespace CarPartStoreApp.ViewModels
         public string ColumnStock => this["PartsInventory.ColumnStock"];
         public string ColumnLocation => this["PartsInventory.ColumnLocation"];
         public string ColumnSupplier => this["PartsInventory.ColumnSupplier"];
+        public string ColumnModel => this["PartsInventory.ColumnModel"];
+        public string ColumnReleaseDate => this["PartsInventory.ColumnReleaseDate"];
         public string ColumnImage => this["PartsInventory.ColumnImage"];
 
         #endregion
@@ -322,6 +367,8 @@ namespace CarPartStoreApp.ViewModels
                         existingPart.Location = part.Location;
                         existingPart.Supplier = part.Supplier;
                         existingPart.ImagePath = part.ImagePath;
+                        existingPart.Model = part.Model;
+                        existingPart.ReleaseDate = part.ReleaseDate;
 
                         // Set the category name for display
                         var category = Categories.FirstOrDefault(c => c.Id == part.CategoryId);
@@ -381,6 +428,41 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
+        /// Tests INSERT functionality with dummy data
+        /// </summary>
+        private async void TestPartInsert(object? parameter)
+        {
+            try
+            {
+                var testViewModel = new TestPartInsertViewModel(_dataService);
+                var result = await testViewModel.TestInsertAsync();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show(
+                        result,
+                        "Test INSERT Result",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                });
+
+                // Refresh parts list to show the new test part if insert succeeded
+                await LoadDataAsync();
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show(
+                        $"Test failed: {ex.Message}",
+                        "Test Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                });
+            }
+        }
+
+        /// <summary>
         /// Changes the current language
         /// </summary>
         private void ChangeLanguage(object? parameter)
@@ -390,6 +472,55 @@ namespace CarPartStoreApp.ViewModels
             _settings.CurrentLanguage = languageCode;
             _settings.Save();
             RefreshAllProperties();
+        }
+
+        /// <summary>
+        /// Changes the database type and refreshes data (async wrapper for command)
+        /// </summary>
+        private async void ChangeDatabaseAsync(object? parameter)
+        {
+            await ChangeDatabaseAsync(SelectedDatabase);
+        }
+
+        /// <summary>
+        /// Changes the database type and refreshes data
+        /// </summary>
+        private async Task ChangeDatabaseAsync(DatabaseType databaseType)
+        {
+            try
+            {
+                var databaseName = databaseType == DatabaseType.Cloud ? DatabaseCloud : DatabaseLocal;
+                var switchingMessage = string.Format(this["SearchAndFilter.DatabaseSwitching"], databaseName);
+                // Console.WriteLine($"🔄 {switchingMessage}");
+
+                // Switch data service
+                _dataService = DataServiceFactory.GetDataService(databaseType);
+
+                // Clear current data
+                Parts.Clear();
+                Categories.Clear();
+
+                // Reload data from new database
+                await LoadDataAsync();
+
+                var successMessage = string.Format(this["SearchAndFilter.DatabaseSwitchSuccess"], databaseName);
+                // Console.WriteLine($"✅ {successMessage}");
+            }
+            catch (Exception ex)
+            {
+                var databaseName = databaseType == DatabaseType.Cloud ? DatabaseCloud : DatabaseLocal;
+                var errorMessage = string.Format(this["SearchAndFilter.DatabaseSwitchError"], databaseName, ex.Message);
+                // Console.WriteLine($"❌ {errorMessage}");
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show(
+                        errorMessage,
+                        this["Messages.ValidationErrorTitle"],
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                });
+            }
         }
 
         /// <summary>
@@ -431,6 +562,9 @@ namespace CarPartStoreApp.ViewModels
             OnPropertyChanged(nameof(ColumnStock));
             OnPropertyChanged(nameof(ColumnLocation));
             OnPropertyChanged(nameof(ColumnSupplier));
+            OnPropertyChanged(nameof(ColumnModel));
+            OnPropertyChanged(nameof(ColumnReleaseDate));
+            OnPropertyChanged(nameof(ColumnImage));
 
             // Title
             OnPropertyChanged(nameof(Title));

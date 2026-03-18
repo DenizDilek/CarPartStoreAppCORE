@@ -3,6 +3,7 @@
     "Title": "Car Parts Storage Management",
     "MenuFile": "_File",
     "MenuAddPart": "_Add New Part...",
+    "MenuTest": "_Test INSERT...",
     "MenuExit": "_Exit",
     "MenuEdit": "_Edit",
     "MenuDeletePart": "_Delete Selected Part",
@@ -19,7 +20,14 @@
     "LabelSearch": "Search:",
     "HintSearchText": "Search by part number, name, description, or supplier",
     "LabelCategory": "Category:",
-    "HintCategoryText": "Filter by category"
+    "HintCategoryText": "Filter by category",
+    "LabelDatabase": "Database:",
+    "HintDatabaseText": "Select database source (Local or Cloud)",
+    "DatabaseLocal": "Local",
+    "DatabaseCloud": "Cloud",
+    "DatabaseSwitching": "Switching to {0} database...",
+    "DatabaseSwitchSuccess": "Successfully switched to {0} database",
+    "DatabaseSwitchError": "Failed to switch to {0} database: {1}"
   },
   "PartsInventory": {
     "GroupBox": "Parts Inventory",
@@ -32,7 +40,9 @@
     "ColumnStock": "Stock",
     "ColumnLocation": "Location",
     "ColumnSupplier": "Supplier",
-    "ColumnImage": "Image"
+    "ColumnImage": "Image",
+    "ColumnModel": "Model",
+    "ColumnReleaseDate": "Release Date"
   },
   "PartDialog": {
     "TitleAdd": "Add New Part",
@@ -47,6 +57,8 @@
     "LabelLocation": "Location:",
     "LabelSupplier": "Supplier:",
     "LabelImage": "Image:",
+    "LabelModel": "Model:",
+    "LabelReleaseDate": "Release Date:",
     "ButtonSave": "Save",
     "ButtonCancel": "Cancel",
     "ButtonUploadImage": "Upload Image...",
