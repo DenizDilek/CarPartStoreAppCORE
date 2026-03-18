@@ -446,7 +446,8 @@
                                                         ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                                         ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                                         ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                                        Margin="0"/>
+                                                        Margin="0"
+                                                        TextElement.Foreground="{TemplateBinding Foreground}"/>
                                         <ToggleButton.Style>
                                             <Style TargetType="ToggleButton">
                                                 <Setter Property="Template">

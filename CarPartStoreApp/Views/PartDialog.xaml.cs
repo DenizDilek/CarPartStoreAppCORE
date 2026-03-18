@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace CarPartStoreApp.Views
     /// <summary>
     /// Dialog window for adding/editing car parts
     /// </summary>
-    public partial class PartDialog : Window
+    public partial class PartDialog : Window, INotifyPropertyChanged
     {
         private readonly ILocalizationService _localization;
         private CarPart _part = new CarPart();
@@ -22,10 +23,92 @@ namespace CarPartStoreApp.Views
         public CarPart Part
         {
             get => _part;
-            set => _part = value;
+            set
+            {
+                if (_part is not null)
+                {
+                    _part.PropertyChanged -= OnPartPropertyChanged;
+                }
+                _part = value;
+                if (_part is not null)
+                {
+                    _part.PropertyChanged += OnPartPropertyChanged;
+                }
+                OnPropertyChanged(nameof(Part));
+                OnPropertyChanged(nameof(PartImageSource));
+            }
+        }
+
+        private void OnPartPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CarPart.ImagePath))
+            {
+                OnPropertyChanged(nameof(PartImageSource));
+                OnPropertyChanged(nameof(RemoveImageVisibility));
+            }
         }
 
         public System.Collections.ObjectModel.ObservableCollection<Category> Categories { get; set; } = new System.Collections.ObjectModel.ObservableCollection<Category>();
+
+        /// <summary>
+        /// Image source for the preview image control
+        /// Converts Part.ImagePath to a BitmapImage for display
+        /// </summary>
+        public BitmapImage? PartImageSource
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_part.ImagePath))
+                    return null;
+
+                try
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    // Allow loading from URLs (Cloudinary) or local files
+                    if (_part.ImagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    {
+                        bitmap.UriSource = new Uri(_part.ImagePath, UriKind.Absolute);
+                        // Important: Set CreateOptions to IgnoreImageCache for network images
+                        // This ensures the image is fetched fresh each time
+                        bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                        bitmap.CacheOption = BitmapCacheOption.None;
+                        // Set a reasonable decode pixel width to avoid memory issues with large images
+                        bitmap.DecodePixelWidth = 800;
+                    }
+                    else if (File.Exists(_part.ImagePath))
+                    {
+                        bitmap.UriSource = new Uri(_part.ImagePath, UriKind.Absolute);
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.DecodePixelWidth = 800;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Visibility of the Remove Image button
+        /// Shows the button only when an image is present
+        /// </summary>
+        public System.Windows.Visibility RemoveImageVisibility
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(_part.ImagePath)
+                    ? System.Windows.Visibility.Collapsed
+                    : System.Windows.Visibility.Visible;
+            }
+        }
 
         /// <summary>
         /// Gets a localized string by key for XAML binding
@@ -184,10 +267,8 @@ namespace CarPartStoreApp.Views
                 // Clear the image path
                 _part.ImagePath = string.Empty;
 
-                // Refresh UI by resetting DataContext
-                var temp = DataContext;
-                DataContext = null;
-                DataContext = temp;
+                // Explicitly notify that the image source has changed to ensure UI updates
+                OnPropertyChanged(nameof(PartImageSource));
             }
         }
 
@@ -226,10 +307,8 @@ namespace CarPartStoreApp.Views
                 // Update the part's image path with Cloudinary URL
                 _part.ImagePath = imageUrl;
 
-                // Refresh UI
-                var temp = DataContext;
-                DataContext = null;
-                DataContext = temp;
+                // Explicitly notify that the image source has changed to ensure UI updates
+                OnPropertyChanged(nameof(PartImageSource));
             }
             catch (Exception ex)
             {
@@ -285,10 +364,8 @@ namespace CarPartStoreApp.Views
                 // Update the part's image path
                 _part.ImagePath = destFilePath;
 
-                // Refresh UI by resetting DataContext
-                var temp = DataContext;
-                DataContext = null;
-                DataContext = temp;
+                // Explicitly notify that the image source has changed to ensure UI updates
+                OnPropertyChanged(nameof(PartImageSource));
             }
             catch (Exception ex)
             {
@@ -317,5 +394,16 @@ namespace CarPartStoreApp.Views
             DialogResult = false;
             Close();
         }
+
+        #region INotifyPropertyChanged Implementation
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

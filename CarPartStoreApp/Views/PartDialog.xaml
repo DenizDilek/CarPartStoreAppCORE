@@ -137,63 +137,88 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <ToggleButton x:Name="ToggleButton"
-                                          Background="{TemplateBinding Background}"
-                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                          BorderThickness="{TemplateBinding BorderThickness}"
-                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          ClickMode="Press">
-                                <ToggleButton.Template>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Border x:Name="Border"
-                                                Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="6"
-                                                Padding="{TemplateBinding Padding}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <ContentPresenter Grid.Column="0"
-                                                                HorizontalAlignment="Stretch"
-                                                                VerticalAlignment="Center"
-                                                                Content="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                                ContentTemplate="{Binding Path=ContentTemplate, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                                ContentTemplateSelector="{Binding Path=ContentTemplateSelector, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                                ContentStringFormat="{Binding Path=ContentStringFormat, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                                Margin="0"/>
-                                                <Path Grid.Column="1"
-                                                      x:Name="Arrow"
-                                                      Width="10"
-                                                      Height="6"
-                                                      Fill="#A0AEC0"
-                                                      Stretch="Uniform"
-                                                      Data="M0,0 L5,6 L10,0"
-                                                      Margin="8,0,4,0"/>
-                                            </Grid>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsFocused" Value="True">
-                                                <Setter Property="BorderBrush" Value="#3182CE" TargetName="Border"/>
-                                                <Setter Property="BorderThickness" Value="2" TargetName="Border"/>
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Fill" Value="#E2E8F0" TargetName="Arrow"/>
-                                            </Trigger>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter Property="Fill" Value="#3182CE" TargetName="Arrow"/>
-                                                <Setter Property="BorderBrush" Value="#3182CE" TargetName="Border"/>
-                                                <Setter Property="BorderThickness" Value="2" TargetName="Border"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </ToggleButton.Template>
-                            </ToggleButton>
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ToggleButton Grid.Column="0"
+                                                  x:Name="ToggleButton"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  ClickMode="Press"
+                                                  Focusable="False"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <ContentPresenter HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Center"
+                                                        Content="{TemplateBinding SelectionBoxItem}"
+                                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                        ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                                        Margin="0"
+                                                        TextElement.Foreground="{TemplateBinding Foreground}"/>
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <ContentPresenter HorizontalAlignment="Stretch"
+                                                                            VerticalAlignment="Stretch"
+                                                            />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    <ToggleButton Grid.Column="1"
+                                                  x:Name="ArrowButton"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  ClickMode="Press"
+                                                  Focusable="False"
+                                                  Padding="8,0,4,0"
+                                                  Cursor="Hand"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Path x:Name="Arrow"
+                                              Width="10"
+                                              Height="6"
+                                              Fill="#A0AEC0"
+                                              Stretch="Uniform"
+                                              Data="M0,0 L5,6 L10,0"/>
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border Background="{TemplateBinding Background}"
+                                                                    Padding="{TemplateBinding Padding}"
+                                                                    Cursor="{TemplateBinding Cursor}">
+                                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                                VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#2D3748"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
                             <!-- Popup for dropdown -->
                             <Popup x:Name="PART_Popup"
-                                   IsOpen="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
                                    Placement="Bottom"
                                    PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                    AllowsTransparency="False"
@@ -215,12 +240,16 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush" Value="#3182CE" TargetName="ToggleButton"/>
-                                <Setter Property="BorderThickness" Value="2" TargetName="ToggleButton"/>
+                                <Setter Property="BorderBrush" Value="#3182CE" TargetName="Border"/>
+                                <Setter Property="BorderThickness" Value="2" TargetName="Border"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Fill" Value="#E2E8F0" TargetName="Arrow"/>
                             </Trigger>
                             <Trigger Property="IsDropDownOpen" Value="True">
-                                <Setter Property="BorderBrush" Value="#3182CE" TargetName="ToggleButton"/>
-                                <Setter Property="BorderThickness" Value="2" TargetName="ToggleButton"/>
+                                <Setter Property="Fill" Value="#3182CE" TargetName="Arrow"/>
+                                <Setter Property="BorderBrush" Value="#3182CE" TargetName="Border"/>
+                                <Setter Property="BorderThickness" Value="2" TargetName="Border"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -876,11 +905,11 @@
                         <TextBox Grid.Column="1" Text="{Binding Part.Model}" Width="200" HorizontalAlignment="Left" Style="{StaticResource ModernTextBox}"/>
 
                         <Label Grid.Column="2" Content="{Binding LabelReleaseDate}" Style="{StaticResource ModernLabel}"/>
-                        <DatePicker Grid.Column="3"
-                                    SelectedDate="{Binding Part.ReleaseDate}"
-                                    Width="200"
-                                    HorizontalAlignment="Left"
-                                    Style="{StaticResource ModernDatePicker}"/>
+                        <TextBox Grid.Column="3"
+                                 Text="{Binding Part.ReleaseDate}"
+                                 Width="200"
+                                 HorizontalAlignment="Left"
+                                 Style="{StaticResource ModernTextBox}"/>
                     </Grid>
                 </GroupBox>
 
@@ -904,32 +933,23 @@
                                 Height="180"
                                 CornerRadius="8"
                                 HorizontalAlignment="Left">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Border.Background" Value="#1A202C"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Part.ImagePath}" Value="">
-                                            <Setter Property="Border.Background" Value="#232D3D"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Part.ImagePath}" Value="{x:Null}">
-                                            <Setter Property="Border.Background" Value="#232D3D"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
                             <Grid>
                                 <Image x:Name="PartImage"
-                                       Source="{Binding PartImageSource}"
+                                       Source="{Binding PartImageSource, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                        Stretch="Uniform"
                                        Margin="12">
                                     <Image.Style>
                                         <Style TargetType="Image">
+                                            <Setter Property="Visibility" Value="Visible"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Part.ImagePath}" Value="">
-                                                    <Setter Property="Image.Visibility" Value="Collapsed"/>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Part.ImagePath}" Value="{x:Null}">
-                                                    <Setter Property="Image.Visibility" Value="Collapsed"/>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PartImageSource}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -944,18 +964,13 @@
                                            FontStyle="Italic">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Part.ImagePath}" Value="">
-                                                    <Setter Property="TextBlock.Visibility" Value="Visible"/>
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Part.ImagePath}" Value="{x:Null}">
-                                                    <Setter Property="TextBlock.Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Part.ImagePath}" Value="">
-                                                    <Setter Property="TextBlock.Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Part.ImagePath}" Value="{x:Null}">
-                                                    <Setter Property="TextBlock.Visibility" Value="Visible"/>
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
