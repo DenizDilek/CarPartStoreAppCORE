@@ -6,6 +6,7 @@ namespace CarPartStoreApp.Data
     /// <summary>
     /// Database configuration and connection management
     /// Supports both Turso (cloud) and local SQLite databases
+    /// Also provides Cloudinary image storage configuration
     /// </summary>
     public static class DatabaseConfig
     {
@@ -15,6 +16,7 @@ namespace CarPartStoreApp.Data
         private static string? _tursoDatabaseUrl;
         private static string? _tursoAuthToken;
         private static string? _tursoHttpUrl;
+        private static CloudinarySettings? _cloudinarySettings;
 
         static DatabaseConfig()
         {
@@ -67,6 +69,24 @@ namespace CarPartStoreApp.Data
         /// Gets Turso HTTP URL (for API calls)
         /// </summary>
         public static string? GetTursoHttpUrl() => _tursoHttpUrl;
+
+        /// <summary>
+        /// Gets Cloudinary settings loaded from environment variables
+        /// </summary>
+        public static CloudinarySettings GetCloudinarySettings()
+        {
+            if (_cloudinarySettings != null)
+                return _cloudinarySettings;
+
+            _cloudinarySettings = new CloudinarySettings
+            {
+                CloudName = Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME") ?? string.Empty,
+                ApiKey = Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY") ?? string.Empty,
+                ApiSecret = Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET") ?? string.Empty
+            };
+
+            return _cloudinarySettings;
+        }
 
         /// <summary>
         /// Creates and returns a new SQLite connection

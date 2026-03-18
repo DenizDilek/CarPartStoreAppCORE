@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -405,10 +406,45 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
-        /// Deletes a part from the database
+        /// Deletes a part from the database and its image from Cloudinary/local storage
         /// </summary>
         private async Task DeletePartFromDatabase(CarPart part)
         {
+            // Delete image from Cloudinary if it's a URL
+            var imageService = ServiceContainer.GetService<IImageStorageService>();
+            if (imageService != null && !string.IsNullOrEmpty(part.ImagePath) && part.ImagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    await imageService.DeleteImageAsync(part.ImagePath);
+                }
+                catch (Exception ex)
+                {
+                    // Log the error but continue with deletion
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MessageBox.Show(
+                            $"Warning: Could not delete image from Cloudinary: {ex.Message}\n\nThe part will still be deleted from the database.",
+                            "Image Deletion Warning",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+                    });
+                }
+            }
+            else if (!string.IsNullOrEmpty(part.ImagePath) && File.Exists(part.ImagePath))
+            {
+                // Delete local file
+                try
+                {
+                    File.Delete(part.ImagePath);
+                }
+                catch
+                {
+                    // Silently ignore errors deleting local files
+                }
+            }
+
+            // Delete part from database
             var success = await _dataService.DeletePartAsync(part.Id);
             if (success)
             {

@@ -6,6 +6,35 @@ using CarPartStoreApp.Models;
 namespace CarPartStoreApp.Data
 {
     /// <summary>
+    /// Cloudinary image storage configuration
+    /// </summary>
+    public class CloudinarySettings
+    {
+        /// <summary>
+        /// Cloudinary cloud name
+        /// </summary>
+        public string CloudName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Cloudinary API key
+        /// </summary>
+        public string ApiKey { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Cloudinary API secret
+        /// </summary>
+        public string ApiSecret { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets whether Cloudinary is properly configured
+        /// </summary>
+        public bool IsConfigured =>
+            !string.IsNullOrEmpty(CloudName) &&
+            !string.IsNullOrEmpty(ApiKey) &&
+            !string.IsNullOrEmpty(ApiSecret);
+    }
+
+    /// <summary>
     /// Application settings manager
     /// Persists user preferences including language selection and database type
     /// </summary>
@@ -23,6 +52,11 @@ namespace CarPartStoreApp.Data
         /// Gets or sets the selected database type (Local or Cloud)
         /// </summary>
         public DatabaseType SelectedDatabase { get; set; } = DatabaseType.Local;
+
+        /// <summary>
+        /// Gets or sets the Cloudinary image storage settings
+        /// </summary>
+        public CloudinarySettings Cloudinary { get; set; } = new CloudinarySettings();
 
         /// <summary>
         /// Gets or sets the last updated timestamp

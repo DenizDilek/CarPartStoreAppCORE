@@ -67,6 +67,18 @@ public partial class App : Application
         ServiceContainer.RegisterInstance(settings);
         ServiceContainer.RegisterInstance(localizationService);
 
+        // Initialize Cloudinary image storage service if configured
+        var cloudinarySettings = DatabaseConfig.GetCloudinarySettings();
+        if (cloudinarySettings.IsConfigured)
+        {
+            var imageStorageService = new CloudinaryStorageService(
+                cloudinarySettings.CloudName,
+                cloudinarySettings.ApiKey,
+                cloudinarySettings.ApiSecret);
+            ServiceContainer.RegisterInstance<IImageStorageService>(imageStorageService);
+            // Console.WriteLine("🖼️ Cloudinary image storage enabled");
+        }
+
         // Create data service using factory (Turso or SQLite based on config)
         var dataService = DataServiceFactory.GetDataService();
 

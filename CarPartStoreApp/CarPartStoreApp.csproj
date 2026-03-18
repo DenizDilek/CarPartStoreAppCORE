@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="CloudinaryDotNet" Version="1.27.2" />
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.4" />
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="10.0.0" />
@@ -67,6 +68,12 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Services\IDataService.cs" DependentUpon="Services\SqliteDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Services\IImageStorageService.cs" DependentUpon="Services\IDataService.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Services\CloudinaryStorageService.cs" DependentUpon="Services\IImageStorageService.cs">
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
