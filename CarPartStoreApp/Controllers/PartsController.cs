@@ -37,7 +37,7 @@ namespace CarPartStoreApp.Controllers
                     (p.PartNumber?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
                     (p.Name?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
                     (p.Description?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
-                    (p.Supplier?.ToLowerInvariant().Contains(searchTerm) ?? false)
+                    (p.Brand?.ToLowerInvariant().Contains(searchTerm) ?? false)
                 ).ToList();
             }
 
@@ -164,11 +164,12 @@ namespace CarPartStoreApp.Controllers
                 CategoryId = part.CategoryId,
                 CategoryName = part.CategoryName,
                 CostPrice = part.CostPrice,
-                RetailPrice = part.RetailPrice,
                 StockQuantity = part.StockQuantity,
                 Location = part.Location,
-                Supplier = part.Supplier,
+                Brand = part.Brand,
                 ImagePath = part.ImagePath,
+                Model = part.Model,
+                ReleaseDate = part.ReleaseDate,
                 CreatedDate = part.CreatedDate.ToString("O"),
                 LastUpdated = part.LastUpdated?.ToString("O")
             };
@@ -180,14 +181,29 @@ namespace CarPartStoreApp.Controllers
             {
                 PartNumber = dto.PartNumber,
                 Name = dto.Name,
-                Description = dto.Description,
+                Description = dto.Description ?? string.Empty,
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
-                RetailPrice = dto.RetailPrice,
                 StockQuantity = dto.StockQuantity,
+<<<<<<< Updated upstream
+                Location = dto.Location ?? string.Empty,
+                Supplier = dto.Supplier ?? string.Empty,
+                ImagePath = dto.ImagePath ?? string.Empty,
+                Model = dto.Model,
+                ReleaseDate = dto.ReleaseDate,
+=======
+<<<<<<< Updated upstream
                 Location = dto.Location,
                 Supplier = dto.Supplier,
                 ImagePath = dto.ImagePath,
+=======
+                Location = dto.Location ?? string.Empty,
+                Brand = dto.Brand ?? string.Empty,
+                ImagePath = dto.ImagePath ?? string.Empty,
+                Model = dto.Model,
+                ReleaseDate = dto.ReleaseDate,
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 CreatedDate = DateTime.Now
             };
         }
@@ -198,14 +214,29 @@ namespace CarPartStoreApp.Controllers
             {
                 PartNumber = dto.PartNumber,
                 Name = dto.Name,
-                Description = dto.Description,
+                Description = dto.Description ?? string.Empty,
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
-                RetailPrice = dto.RetailPrice,
                 StockQuantity = dto.StockQuantity,
+<<<<<<< Updated upstream
+                Location = dto.Location ?? string.Empty,
+                Supplier = dto.Supplier ?? string.Empty,
+                ImagePath = dto.ImagePath ?? string.Empty,
+                Model = dto.Model,
+                ReleaseDate = dto.ReleaseDate
+=======
+<<<<<<< Updated upstream
                 Location = dto.Location,
                 Supplier = dto.Supplier,
                 ImagePath = dto.ImagePath
+=======
+                Location = dto.Location ?? string.Empty,
+                Brand = dto.Brand ?? string.Empty,
+                ImagePath = dto.ImagePath ?? string.Empty,
+                Model = dto.Model,
+                ReleaseDate = dto.ReleaseDate
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             };
         }
     }

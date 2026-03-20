@@ -11,11 +11,11 @@ namespace CarPartStoreApp.DTOs
 
         [Required]
         [StringLength(50)]
-        public string PartNumber { get; set; }
+        public required string PartNumber { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [StringLength(500)]
         public string? Description { get; set; }
@@ -30,21 +30,22 @@ namespace CarPartStoreApp.DTOs
         public decimal CostPrice { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal RetailPrice { get; set; }
-
-        [Required]
         [Range(0, int.MaxValue)]
         public int StockQuantity { get; set; }
 
         [StringLength(100)]
         public string? Location { get; set; }
 
-        [StringLength(255)]
-        public string? Supplier { get; set; }
+        [StringLength(100)]
+        public string? Brand { get; set; }
 
         [StringLength(255)]
         public string? ImagePath { get; set; }
+
+        [StringLength(50)]
+        public string? Model { get; set; }
+
+        public int? ReleaseDate { get; set; }
 
         public string? CreatedDate { get; set; }
 
@@ -58,11 +59,11 @@ namespace CarPartStoreApp.DTOs
     {
         [Required]
         [StringLength(50)]
-        public string PartNumber { get; set; }
+        public required string PartNumber { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [StringLength(500)]
         public string? Description { get; set; }
@@ -75,21 +76,22 @@ namespace CarPartStoreApp.DTOs
         public decimal CostPrice { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal RetailPrice { get; set; }
-
-        [Required]
         [Range(0, int.MaxValue)]
         public int StockQuantity { get; set; }
 
         [StringLength(100)]
         public string? Location { get; set; }
 
-        [StringLength(255)]
-        public string? Supplier { get; set; }
+        [StringLength(100)]
+        public string? Brand { get; set; }
 
         [StringLength(255)]
         public string? ImagePath { get; set; }
+
+        [StringLength(50)]
+        public string? Model { get; set; }
+
+        public int? ReleaseDate { get; set; }
     }
 
     /// <summary>
@@ -99,11 +101,11 @@ namespace CarPartStoreApp.DTOs
     {
         [Required]
         [StringLength(50)]
-        public string PartNumber { get; set; }
+        public required string PartNumber { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [StringLength(500)]
         public string? Description { get; set; }
@@ -116,20 +118,21 @@ namespace CarPartStoreApp.DTOs
         public decimal CostPrice { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public decimal RetailPrice { get; set; }
-
-        [Required]
         [Range(0, int.MaxValue)]
         public int StockQuantity { get; set; }
 
         [StringLength(100)]
         public string? Location { get; set; }
 
-        [StringLength(255)]
-        public string? Supplier { get; set; }
+        [StringLength(100)]
+        public string? Brand { get; set; }
 
         [StringLength(255)]
         public string? ImagePath { get; set; }
+
+        [StringLength(50)]
+        public string? Model { get; set; }
+
+        public int? ReleaseDate { get; set; }
     }
 }

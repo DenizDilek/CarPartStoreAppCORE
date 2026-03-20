@@ -4,9 +4,25 @@
  */
 
 import axios, { AxiosInstance, AxiosError } from 'axios';
+import type {
+  CarPartDto,
+  CreatePartDto,
+  UpdatePartDto,
+  CategoryDto,
+  CreateCategoryDto,
+  UpdateCategoryDto,
+  ApiError,
+  DashboardStats,
+} from '@/types';
 
 // API base URL - connects to the WPF embedded API server
-const API_BASE_URL = 'http://localhost:5000/api';
+// Can be configured via environment variable VITE_API_URL
+const API_BASE_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : 'http://localhost:5000/api';
+
+// Log which API URL is being used
+console.log(`🔧 API Client initialized with base URL: ${API_BASE_URL}`);
 
 /**
  * Create and configure axios instance
@@ -130,6 +146,30 @@ export const partsApi = {
     });
     return response.data;
   },
+
+  /**
+   * Get dashboard statistics
+   */
+  getDashboardStats: async () => {
+    const response = await apiClient.get<DashboardStats>('/parts/dashboard/stats');
+    return response.data;
+  },
+
+  /**
+   * Get low stock parts (stock < 5)
+   */
+  getLowStock: async () => {
+    const response = await apiClient.get<CarPartDto[]>('/parts/dashboard/low-stock');
+    return response.data;
+  },
+
+  /**
+   * Get recent parts (last 10 added)
+   */
+  getRecent: async () => {
+    const response = await apiClient.get<CarPartDto[]>('/parts/dashboard/recent');
+    return response.data;
+  },
 };
 
 /**
@@ -149,6 +189,30 @@ export const categoriesApi = {
    */
   getById: async (id: number) => {
     const response = await apiClient.get<CategoryDto>(`/categories/${id}`);
+    return response.data;
+  },
+
+  /**
+   * Create a new category
+   */
+  create: async (data: CreateCategoryDto) => {
+    const response = await apiClient.post<CategoryDto>('/categories', data);
+    return response.data;
+  },
+
+  /**
+   * Update an existing category
+   */
+  update: async (id: number, data: UpdateCategoryDto) => {
+    const response = await apiClient.put<void>(`/categories/${id}`, data);
+    return response.data;
+  },
+
+  /**
+   * Delete a category
+   */
+  delete: async (id: number) => {
+    const response = await apiClient.delete<void>(`/categories/${id}`);
     return response.data;
   },
 

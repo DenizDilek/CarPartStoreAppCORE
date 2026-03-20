@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CarPartStoreApp.ViewModels;
 
 namespace CarPartStoreApp.Models
@@ -15,11 +16,21 @@ namespace CarPartStoreApp.Models
         private int _categoryId;
         private string _categoryName = string.Empty;
         private decimal _costPrice;
-        private decimal _retailPrice;
         private int _stockQuantity;
         private string _location = string.Empty;
-        private string _supplier = string.Empty;
         private string _imagePath = string.Empty;
+<<<<<<< Updated upstream
+        private string? _model = string.Empty;
+        private int? _releaseYear;
+=======
+<<<<<<< Updated upstream
+=======
+        private List<string> _imagePaths = new List<string>();
+        private string? _model = string.Empty;
+        private string _brand = string.Empty;
+        private int? _releaseYear;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         private DateTime _createdDate = DateTime.Now;
         private DateTime? _lastUpdated;
 
@@ -69,12 +80,6 @@ namespace CarPartStoreApp.Models
             set => SetProperty(ref _costPrice, value);
         }
 
-        public decimal RetailPrice
-        {
-            get => _retailPrice;
-            set => SetProperty(ref _retailPrice, value);
-        }
-
         public int StockQuantity
         {
             get => _stockQuantity;
@@ -87,18 +92,76 @@ namespace CarPartStoreApp.Models
             set => SetProperty(ref _location, value);
         }
 
-        public string Supplier
-        {
-            get => _supplier;
-            set => SetProperty(ref _supplier, value);
-        }
-
         public string ImagePath
         {
-            get => _imagePath;
-            set => SetProperty(ref _imagePath, value);
+            get => _imagePaths.Count > 0 ? _imagePaths[0] : string.Empty;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    _imagePaths.Clear();
+                }
+                else if (_imagePaths.Count == 0)
+                {
+                    _imagePaths.Add(value);
+                }
+                else
+                {
+                    _imagePaths[0] = value;
+                }
+                _imagePath = value;
+                OnPropertyChanged(nameof(ImagePath));
+                OnPropertyChanged(nameof(ImagePaths));
+            }
         }
 
+<<<<<<< Updated upstream
+=======
+        /// <summary>
+        /// Collection of image paths for this part.
+        /// First image is the primary image.
+        /// </summary>
+        public List<string> ImagePaths
+        {
+            get => _imagePaths;
+            set
+            {
+                _imagePaths = value ?? new List<string>();
+                OnPropertyChanged(nameof(ImagePaths));
+                // Also update the single ImagePath for backward compatibility
+                _imagePath = _imagePaths.Count > 0 ? _imagePaths[0] : string.Empty;
+                OnPropertyChanged(nameof(ImagePath));
+            }
+        }
+
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+        public string? Model
+        {
+            get => _model;
+            set => SetProperty(ref _model, value);
+        }
+
+<<<<<<< Updated upstream
+=======
+        public string Brand
+        {
+            get => _brand;
+            set => SetProperty(ref _brand, value);
+        }
+
+>>>>>>> Stashed changes
+        public int? ReleaseDate
+        {
+            get => _releaseYear;
+            set => SetProperty(ref _releaseYear, value);
+        }
+
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         public DateTime CreatedDate
         {
             get => _createdDate;

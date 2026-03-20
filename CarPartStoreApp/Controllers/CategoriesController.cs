@@ -60,11 +60,12 @@ namespace CarPartStoreApp.Controllers
                 CategoryId = p.CategoryId,
                 CategoryName = p.CategoryName,
                 CostPrice = p.CostPrice,
-                RetailPrice = p.RetailPrice,
                 StockQuantity = p.StockQuantity,
                 Location = p.Location,
-                Supplier = p.Supplier,
+                Brand = p.Brand,
                 ImagePath = p.ImagePath,
+                Model = p.Model,
+                ReleaseDate = p.ReleaseDate,
                 CreatedDate = p.CreatedDate.ToString("O"),
                 LastUpdated = p.LastUpdated?.ToString("O")
             }).ToList();
@@ -97,11 +98,12 @@ namespace CarPartStoreApp.Controllers
                 CategoryId = p.CategoryId,
                 CategoryName = p.CategoryName,
                 CostPrice = p.CostPrice,
-                RetailPrice = p.RetailPrice,
                 StockQuantity = p.StockQuantity,
                 Location = p.Location,
-                Supplier = p.Supplier,
+                Brand = p.Brand,
                 ImagePath = p.ImagePath,
+                Model = p.Model,
+                ReleaseDate = p.ReleaseDate,
                 CreatedDate = p.CreatedDate.ToString("O"),
                 LastUpdated = p.LastUpdated?.ToString("O")
             }).ToList();
