@@ -69,6 +69,7 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
 
 # Database
 *.db
@@ -89,3 +90,7 @@ desktop.ini
 .idea/
 *.sublime-workspace
 *.sublime-project
+
+#Git
+
+.gitignore
