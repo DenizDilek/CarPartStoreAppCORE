@@ -5,6 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarPartStoreApp"
         mc:Ignorable="d"
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+        Title="{Binding Title}" Height="600" Width="1000">
+=======
+>>>>>>> Stashed changes
         Title="{Binding Title}" Height="650" Width="1100"
         WindowStartupLocation="CenterScreen"
         Background="#1A202C"
@@ -185,15 +191,27 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ScrollBar">
                         <Grid>
+<<<<<<< Updated upstream
                             <Track x:Name="PART_Track" IsDirectionReversed="True">
                                 <Track.Thumb>
                                     <Thumb>
+=======
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True"
+                                   Margin="0,2,0,2">
+                                <Track.Thumb>
+                                    <Thumb MinWidth="10">
+>>>>>>> Stashed changes
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
                                                 <Border x:Name="ThumbBorder"
                                                         Background="#4A5568"
+<<<<<<< Updated upstream
                                                         CornerRadius="5"
                                                         Margin="0,2,0,2"/>
+=======
+                                                        CornerRadius="5"/>
+>>>>>>> Stashed changes
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter Property="Background" Value="#5A6578" TargetName="ThumbBorder"/>
@@ -214,19 +232,35 @@
         <Style x:Key="ModernHorizontalScrollBar" TargetType="ScrollBar" BasedOn="{StaticResource ModernScrollBar}">
             <Setter Property="MinHeight" Value="10"/>
             <Setter Property="Height" Value="10"/>
+<<<<<<< Updated upstream
+=======
+            <Setter Property="Width" Value="Auto"/>
+>>>>>>> Stashed changes
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ScrollBar">
                         <Grid>
+<<<<<<< Updated upstream
                             <Track x:Name="PART_Track" IsDirectionReversed="False">
                                 <Track.Thumb>
                                     <Thumb>
+=======
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="False"
+                                   Margin="2,0,2,0">
+                                <Track.Thumb>
+                                    <Thumb MinHeight="10">
+>>>>>>> Stashed changes
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
                                                 <Border x:Name="ThumbBorder"
                                                         Background="#4A5568"
+<<<<<<< Updated upstream
                                                         CornerRadius="5"
                                                         Margin="2,0,2,0"/>
+=======
+                                                        CornerRadius="5"/>
+>>>>>>> Stashed changes
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter Property="Background" Value="#5A6578" TargetName="ThumbBorder"/>
@@ -244,7 +278,81 @@
         </Style>
 
         <!-- Implicit ScrollBar Style - applies to all ScrollBar controls by default -->
+<<<<<<< Updated upstream
         <Style TargetType="ScrollBar" BasedOn="{StaticResource ModernScrollBar}" />
+=======
+        <!-- We use a trigger-based approach instead of BasedOn to handle orientation properly -->
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#4A5568"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="MinWidth" Value="10"/>
+                    <Setter Property="Width" Value="10"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid>
+                                    <Track x:Name="PART_Track"
+                                           IsDirectionReversed="True"
+                                           Margin="0,2,0,2">
+                                        <Track.Thumb>
+                                            <Thumb MinWidth="10">
+                                                <Thumb.Template>
+                                                    <ControlTemplate TargetType="Thumb">
+                                                        <Border x:Name="ThumbBorder"
+                                                                Background="#4A5568"
+                                                                CornerRadius="5"/>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#5A6578" TargetName="ThumbBorder"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Thumb.Template>
+                                            </Thumb>
+                                        </Track.Thumb>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="MinHeight" Value="10"/>
+                    <Setter Property="Height" Value="10"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid>
+                                    <Track x:Name="PART_Track"
+                                           IsDirectionReversed="False"
+                                           Margin="2,0,2,0">
+                                        <Track.Thumb>
+                                            <Thumb MinHeight="10">
+                                                <Thumb.Template>
+                                                    <ControlTemplate TargetType="Thumb">
+                                                        <Border x:Name="ThumbBorder"
+                                                                Background="#4A5568"
+                                                                CornerRadius="5"/>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#5A6578" TargetName="ThumbBorder"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Thumb.Template>
+                                            </Thumb>
+                                        </Track.Thumb>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+>>>>>>> Stashed changes
 
         <!-- ScrollViewer Style (Dark Theme) -->
         <Style x:Key="ModernScrollViewer" TargetType="ScrollViewer">
@@ -265,11 +373,27 @@
                             <ScrollBar x:Name="PART_VerticalScrollBar"
                                        Grid.Column="1"
                                        Orientation="Vertical"
+<<<<<<< Updated upstream
                                        Style="{StaticResource ModernScrollBar}"/>
                             <ScrollBar x:Name="PART_HorizontalScrollBar"
                                        Grid.Row="1"
                                        Orientation="Horizontal"
                                        Style="{StaticResource ModernHorizontalScrollBar}"/>
+=======
+                                       Style="{StaticResource ModernScrollBar}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Value="{TemplateBinding VerticalOffset}"/>
+                            <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                       Grid.Row="1"
+                                       Orientation="Horizontal"
+                                       Style="{StaticResource ModernHorizontalScrollBar}"
+                                       Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                       Maximum="{TemplateBinding ScrollableWidth}"
+                                       ViewportSize="{TemplateBinding ViewportWidth}"
+                                       Value="{TemplateBinding HorizontalOffset}"/>
+>>>>>>> Stashed changes
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -364,7 +488,11 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <ContentPresenter Grid.Row="0" ContentSource="Header" Margin="8,0,8,12"/>
+<<<<<<< Updated upstream
                                 <ContentPresenter Grid.Row="1"/>
+=======
+                                <ContentPresenter Grid.Row="1" VerticalAlignment="Stretch"/>
+>>>>>>> Stashed changes
                             </Grid>
                         </Border>
                     </ControlTemplate>
@@ -818,6 +946,10 @@
         </Style>
     </Window.Resources>
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     <DockPanel>
         <!-- Custom Title Bar -->
         <Border DockPanel.Dock="Top" Background="#2D3748" Height="32" x:Name="TitleBar">
@@ -1047,7 +1179,11 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+<<<<<<< Updated upstream
                         <RowDefinition Height="Auto"/>
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
                     </Grid.RowDefinitions>
 
                     <!-- Search Box -->
@@ -1063,6 +1199,7 @@
                         <ComboBox ItemsSource="{Binding Categories}"
                                   DisplayMemberPath="Name"
                                   SelectedItem="{Binding SelectedCategory}"
+<<<<<<< Updated upstream
                                   Width="320" Style="{StaticResource ModernComboBox}"/>
                         <TextBlock Text="{Binding CategoryHint}" Style="{StaticResource HintTextStyle}"/>
                     </StackPanel>
@@ -1073,6 +1210,66 @@
                         <ComboBox ItemsSource="{Binding DatabaseTypes}"
                                   SelectedItem="{Binding SelectedDatabase}"
                                   Width="320" Style="{StaticResource ModernComboBox}">
+=======
+                                  Width="300" Height="25" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CategoryHint}" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Gray" FontSize="11"/>
+=======
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Search Box (Full Width) -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,0,0,12">
+                        <Label Content="{Binding SearchLabel}" Width="90" Style="{StaticResource ModernLabel}"/>
+                        <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}" Width="280" Style="{StaticResource ModernTextBox}"/>
+                        <TextBlock Text="{Binding SearchHint}" Style="{StaticResource HintTextStyle}" Margin="8,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Category Filter (Left Column) -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,12">
+                        <Label Content="{Binding CategoryLabel}" Width="90" Style="{StaticResource ModernLabel}"/>
+                        <ComboBox ItemsSource="{Binding Categories}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedCategory}"
+                                  Width="180" Style="{StaticResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <!-- Brand Filter (Right Column) -->
+                    <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,12">
+                        <Label Content="{Binding BrandLabel}" Width="90" Style="{StaticResource ModernLabel}"/>
+                        <ComboBox ItemsSource="{Binding Brands}"
+                                  SelectedItem="{Binding SelectedBrand}"
+                                  Width="180" Style="{StaticResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <!-- Year Filter (Left Column) -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,12">
+                        <Label Content="{Binding YearLabel}" Width="90" Style="{StaticResource ModernLabel}"/>
+                        <ComboBox ItemsSource="{Binding Years}"
+                                  SelectedItem="{Binding SelectedYear}"
+                                  Width="180" Style="{StaticResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <!-- Model Filter (Right Column) -->
+                    <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,12">
+                        <Label Content="{Binding ModelLabel}" Width="90" Style="{StaticResource ModernLabel}"/>
+                        <ComboBox ItemsSource="{Binding Models}"
+                                  SelectedItem="{Binding SelectedModel}"
+                                  Width="180" Style="{StaticResource ModernComboBox}"/>
+                    </StackPanel>
+
+                    <!-- Database Selection (Full Width) -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                        <Label Content="{Binding DatabaseLabel}" Width="90" Style="{StaticResource ModernLabel}"/>
+                        <ComboBox ItemsSource="{Binding DatabaseTypes}"
+                                  SelectedItem="{Binding SelectedDatabase}"
+                                  Width="180" Style="{StaticResource ModernComboBox}">
+>>>>>>> Stashed changes
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock>
@@ -1091,7 +1288,26 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+<<<<<<< Updated upstream
                         <TextBlock Text="{Binding DatabaseHint}" Style="{StaticResource HintTextStyle}"/>
+=======
+
+                        <!-- Action Buttons -->
+                        <Button Content="{Binding ButtonSearch}"
+                                Command="{Binding SearchCommand}"
+                                ToolTip="{Binding ToolTipSearch}"
+                                Width="90"
+                                Height="32"
+                                Margin="24,0,12,0"
+                                Style="{StaticResource ModernButton}"/>
+                        <Button Content="{Binding ButtonReset}"
+                                Command="{Binding ResetCommand}"
+                                ToolTip="{Binding ToolTipReset}"
+                                Width="110"
+                                Height="32"
+                                Style="{StaticResource SecondaryButton}"/>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -1104,10 +1320,31 @@
                 <DataGrid x:Name="PartsDataGrid"
                           ItemsSource="{Binding Parts}"
                           SelectedItem="{Binding SelectedPart}"
+<<<<<<< Updated upstream
                           Style="{StaticResource ModernDataGrid}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           RowStyle="{StaticResource DataGridRowStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}">
+=======
+<<<<<<< Updated upstream
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          SelectionMode="Single"
+                          GridLinesVisibility="All"
+                          HeadersVisibility="Column"
+                          RowBackground="White"
+                          AlternatingRowBackground="#F5F5F5">
+=======
+                          Style="{StaticResource ModernDataGrid}"
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          RowStyle="{StaticResource DataGridRowStyle}"
+                          CellStyle="{StaticResource DataGridCellStyle}"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 <DataGrid.ContextMenu>
                     <ContextMenu Style="{StaticResource ModernContextMenu}">
                         <MenuItem Header="{Binding ContextMenuEdit}" Command="{Binding EditPartCommand}" Style="{StaticResource SubMenuItem}">
@@ -1115,8 +1352,23 @@
                                 <TextBlock Text="✏️" FontSize="14"/>
                             </MenuItem.Icon>
                         </MenuItem>
+<<<<<<< Updated upstream
                         <Separator Background="#4A5568"/>
                         <MenuItem Header="{Binding ContextMenuDelete}" Command="{Binding DeletePartCommand}" Style="{StaticResource SubMenuItem}">
+=======
+<<<<<<< Updated upstream
+                        <Separator/>
+                        <MenuItem Header="{Binding ContextMenuDelete}" Command="{Binding DeletePartCommand}">
+=======
+                        <MenuItem Header="{Binding ContextMenuDisplay}" Command="{Binding DisplayPartCommand}" Style="{StaticResource SubMenuItem}">
+                            <MenuItem.Icon>
+                                <TextBlock Text="👁️" FontSize="14"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator Background="#4A5568"/>
+                        <MenuItem Header="{Binding ContextMenuDelete}" Command="{Binding DeletePartCommand}" Style="{StaticResource SubMenuItem}">
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                             <MenuItem.Icon>
                                 <TextBlock Text="🗑️" FontSize="14"/>
                             </MenuItem.Icon>
@@ -1125,11 +1377,27 @@
                 </DataGrid.ContextMenu>
 
                 <DataGrid.Columns>
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+                    <DataGridTextColumn Binding="{Binding PartNumber}" Width="120"/>
+                    <DataGridTextColumn Binding="{Binding Name}" Width="200"/>
+                    <DataGridTextColumn Binding="{Binding Description}" Width="250"/>
+                    <DataGridTextColumn Binding="{Binding CategoryName}" Width="120"/>
+                    <DataGridTextColumn Binding="{Binding CostPrice, StringFormat='C2'}" Width="80"/>
+                    <DataGridTextColumn Binding="{Binding RetailPrice, StringFormat='C2'}" Width="80"/>
+                    <DataGridTextColumn Binding="{Binding StockQuantity}" Width="70"/>
+                    <DataGridTextColumn Binding="{Binding Location}" Width="120"/>
+                    <DataGridTextColumn Binding="{Binding Supplier}" Width="150"/>
+                    <DataGridTemplateColumn Width="100" Header="">
+=======
+>>>>>>> Stashed changes
                     <DataGridTextColumn Header="Part #" Binding="{Binding PartNumber}" Width="110"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180"/>
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="240"/>
                     <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="110"/>
                     <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice, StringFormat='C2'}" Width="80"/>
+<<<<<<< Updated upstream
                     <DataGridTextColumn Header="Retail" Binding="{Binding RetailPrice, StringFormat='C2'}" Width="80"/>
                     <DataGridTextColumn Header="Stock" Binding="{Binding StockQuantity}" Width="65"/>
                     <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="110"/>
@@ -1137,6 +1405,15 @@
                     <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="100"/>
                     <DataGridTextColumn Header="Year" Binding="{Binding ReleaseDate}" Width="80"/>
                     <DataGridTemplateColumn Width="100" Header="Image">
+=======
+                    <DataGridTextColumn Header="Stock" Binding="{Binding StockQuantity}" Width="65"/>
+                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="110"/>
+                    <DataGridTextColumn Header="Brand" Binding="{Binding Brand}" Width="130"/>
+                    <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="100"/>
+                    <DataGridTextColumn Header="Year" Binding="{Binding ReleaseDate}" Width="80"/>
+                    <DataGridTemplateColumn Width="100" Header="Image">
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border BorderBrush="#4A5568" BorderThickness="1" Background="#1A202C" Width="80" Height="50" Margin="4" CornerRadius="4">

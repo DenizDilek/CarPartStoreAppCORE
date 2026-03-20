@@ -25,8 +25,20 @@ namespace CarPartStoreApp.ViewModels
         private string _searchTerm = string.Empty;
         private CarPart? _selectedPart;
         private Category? _selectedCategory;
+<<<<<<< Updated upstream
         private DatabaseType _selectedDatabase;
         private readonly Services.EmbeddedApiServer? _apiServer;
+=======
+<<<<<<< Updated upstream
+        private readonly Services.EmbeddedApiServer _apiServer;
+=======
+        private DatabaseType _selectedDatabase;
+        private string? _selectedBrand;
+        private int? _selectedYear;
+        private string? _selectedModel;
+        private readonly Services.EmbeddedApiServer? _apiServer;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
         public MainWindowViewModel(IDataService dataService, AppSettings settings, ILocalizationService localization, EmbeddedApiServer? apiServer = null)
         {
@@ -38,25 +50,58 @@ namespace CarPartStoreApp.ViewModels
 
             Parts = new ObservableCollection<CarPart>();
             Categories = new ObservableCollection<Category>();
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+            Brands = new ObservableCollection<string>();
+            Years = new ObservableCollection<int>();
+            Models = new ObservableCollection<string>();
+>>>>>>> Stashed changes
             DatabaseTypes = new ObservableCollection<DatabaseType>
             {
                 DatabaseType.Local,
                 DatabaseType.Cloud
             };
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
             AddPartCommand = new RelayCommand(AddPart);
             EditPartCommand = new RelayCommand(EditPart, CanEditPart);
             DeletePartCommand = new RelayCommand(DeletePart, CanDeletePart);
+            DisplayPartCommand = new RelayCommand(DisplayPart, CanDisplayPart);
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+<<<<<<< Updated upstream
             ChangeDatabaseCommand = new RelayCommand(ChangeDatabaseAsync);
             TestPartCommand = new RelayCommand(TestPartInsert);
+=======
+<<<<<<< Updated upstream
+=======
+            ChangeDatabaseCommand = new RelayCommand(ChangeDatabaseAsync);
+            TestPartCommand = new RelayCommand(TestPartInsert);
+            SearchCommand = new RelayCommand(ExecuteSearch);
+            ResetCommand = new RelayCommand(ExecuteReset);
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         }
 
         #region Collections
 
         public ObservableCollection<CarPart> Parts { get; }
         public ObservableCollection<Category> Categories { get; }
+<<<<<<< Updated upstream
         public ObservableCollection<DatabaseType> DatabaseTypes { get; }
+=======
+<<<<<<< Updated upstream
+=======
+        public ObservableCollection<string> Brands { get; }
+        public ObservableCollection<int> Years { get; }
+        public ObservableCollection<string> Models { get; }
+        public ObservableCollection<DatabaseType> DatabaseTypes { get; }
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
         #endregion
 
@@ -86,6 +131,42 @@ namespace CarPartStoreApp.ViewModels
             set
             {
                 if (SetProperty(ref _selectedCategory, value))
+                {
+                    FilterParts();
+                }
+            }
+        }
+
+        public string? SelectedBrand
+        {
+            get => _selectedBrand;
+            set
+            {
+                if (SetProperty(ref _selectedBrand, value))
+                {
+                    FilterParts();
+                }
+            }
+        }
+
+        public int? SelectedYear
+        {
+            get => _selectedYear;
+            set
+            {
+                if (SetProperty(ref _selectedYear, value))
+                {
+                    FilterParts();
+                }
+            }
+        }
+
+        public string? SelectedModel
+        {
+            get => _selectedModel;
+            set
+            {
+                if (SetProperty(ref _selectedModel, value))
                 {
                     FilterParts();
                 }
@@ -143,9 +224,20 @@ namespace CarPartStoreApp.ViewModels
         public ICommand AddPartCommand { get; }
         public ICommand EditPartCommand { get; }
         public ICommand DeletePartCommand { get; }
+        public ICommand DisplayPartCommand { get; }
         public ICommand ChangeLanguageCommand { get; }
+<<<<<<< Updated upstream
         public ICommand ChangeDatabaseCommand { get; }
         public ICommand TestPartCommand { get; }
+=======
+<<<<<<< Updated upstream
+=======
+        public ICommand ChangeDatabaseCommand { get; }
+        public ICommand TestPartCommand { get; }
+        public ICommand SearchCommand { get; }
+        public ICommand ResetCommand { get; }
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
         #endregion
 
@@ -163,6 +255,7 @@ namespace CarPartStoreApp.ViewModels
         public string LanguageTurkish => this["MainWindow.MenuLanguageTurkish"];
         public string About => this["MainWindow.MenuAbout"];
         public string ContextMenuEdit => this["MainWindow.ContextMenuEdit"];
+        public string ContextMenuDisplay => this["MainWindow.ContextMenuDisplay"];
         public string ContextMenuDelete => this["MainWindow.ContextMenuDelete"];
 
         #endregion
@@ -174,6 +267,17 @@ namespace CarPartStoreApp.ViewModels
         public string SearchHint => this["SearchAndFilter.HintSearchText"];
         public string CategoryLabel => this["SearchAndFilter.LabelCategory"];
         public string CategoryHint => this["SearchAndFilter.HintCategoryText"];
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+        public string BrandLabel => this["SearchAndFilter.LabelBrand"];
+        public string BrandHint => this["SearchAndFilter.HintBrandText"];
+        public string YearLabel => this["SearchAndFilter.LabelYear"];
+        public string YearHint => this["SearchAndFilter.HintYearText"];
+        public string ModelLabel => this["SearchAndFilter.LabelModel"];
+        public string ModelHint => this["SearchAndFilter.HintModelText"];
+>>>>>>> Stashed changes
         public string DatabaseLabel => this["SearchAndFilter.LabelDatabase"];
         public string DatabaseHint => this["SearchAndFilter.HintDatabaseText"];
 
@@ -186,6 +290,30 @@ namespace CarPartStoreApp.ViewModels
         /// Gets display name for Cloud database
         /// </summary>
         public string DatabaseCloud => this["SearchAndFilter.DatabaseCloud"];
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+
+        /// <summary>
+        /// Gets the Search button label
+        /// </summary>
+        public string ButtonSearch => this["SearchAndFilter.ButtonSearch"];
+
+        /// <summary>
+        /// Gets the Reset button label
+        /// </summary>
+        public string ButtonReset => this["SearchAndFilter.ButtonReset"];
+
+        /// <summary>
+        /// Gets the Search button tooltip
+        /// </summary>
+        public string ToolTipSearch => this["SearchAndFilter.ToolTipSearch"];
+
+        /// <summary>
+        /// Gets the Reset button tooltip
+        /// </summary>
+        public string ToolTipReset => this["SearchAndFilter.ToolTipReset"];
+>>>>>>> Stashed changes
 
         #endregion
 
@@ -197,12 +325,20 @@ namespace CarPartStoreApp.ViewModels
         public string ColumnDescription => this["PartsInventory.ColumnDescription"];
         public string ColumnCategory => this["PartsInventory.ColumnCategory"];
         public string ColumnCost => this["PartsInventory.ColumnCost"];
-        public string ColumnRetail => this["PartsInventory.ColumnRetail"];
         public string ColumnStock => this["PartsInventory.ColumnStock"];
         public string ColumnLocation => this["PartsInventory.ColumnLocation"];
+<<<<<<< Updated upstream
         public string ColumnSupplier => this["PartsInventory.ColumnSupplier"];
+<<<<<<< Updated upstream
         public string ColumnModel => this["PartsInventory.ColumnModel"];
         public string ColumnReleaseDate => this["PartsInventory.ColumnReleaseDate"];
+=======
+=======
+        public string ColumnBrand => this["PartsInventory.ColumnBrand"];
+        public string ColumnModel => this["PartsInventory.ColumnModel"];
+        public string ColumnReleaseDate => this["PartsInventory.ColumnReleaseDate"];
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         public string ColumnImage => this["PartsInventory.ColumnImage"];
 
         #endregion
@@ -243,12 +379,48 @@ namespace CarPartStoreApp.ViewModels
                 Parts.Add(part);
             }
 
+            // Populate unique brands
+            Brands.Clear();
+            var uniqueBrands = parts
+                .Where(p => !string.IsNullOrWhiteSpace(p.Brand))
+                .Select(p => p.Brand!)
+                .Distinct()
+                .OrderBy(b => b);
+            foreach (var brand in uniqueBrands)
+            {
+                Brands.Add(brand);
+            }
+
+            // Populate unique years
+            Years.Clear();
+            var uniqueYears = parts
+                .Where(p => p.ReleaseDate.HasValue)
+                .Select(p => p.ReleaseDate!.Value)
+                .Distinct()
+                .OrderByDescending(y => y);
+            foreach (var year in uniqueYears)
+            {
+                Years.Add(year);
+            }
+
+            // Populate unique models
+            Models.Clear();
+            var uniqueModels = parts
+                .Where(p => !string.IsNullOrWhiteSpace(p.Model))
+                .Select(p => p.Model!)
+                .Distinct()
+                .OrderBy(m => m);
+            foreach (var model in uniqueModels)
+            {
+                Models.Add(model);
+            }
+
             // Apply current filters
             FilterParts();
         }
 
         /// <summary>
-        /// Filters parts based on search term and category
+        /// Filters parts based on search term, category, brand, year, and model
         /// </summary>
         private void FilterParts()
         {
@@ -267,13 +439,32 @@ namespace CarPartStoreApp.ViewModels
                         (p.PartNumber?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
                         (p.Name?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
                         (p.Description?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
-                        (p.Supplier?.ToLowerInvariant().Contains(searchTerm) ?? false));
+                        (p.Brand?.ToLowerInvariant().Contains(searchTerm) ?? false) ||
+                        (p.Model?.ToLowerInvariant().Contains(searchTerm) ?? false));
                 }
 
                 // Filter by category
                 if (SelectedCategory != null)
                 {
                     filtered = filtered.Where(p => p.CategoryId == SelectedCategory.Id);
+                }
+
+                // Filter by brand
+                if (!string.IsNullOrWhiteSpace(SelectedBrand))
+                {
+                    filtered = filtered.Where(p => p.Brand == SelectedBrand);
+                }
+
+                // Filter by year
+                if (SelectedYear.HasValue)
+                {
+                    filtered = filtered.Where(p => p.ReleaseDate == SelectedYear.Value);
+                }
+
+                // Filter by model
+                if (!string.IsNullOrWhiteSpace(SelectedModel))
+                {
+                    filtered = filtered.Where(p => p.Model == SelectedModel);
                 }
 
                 // Update UI on main thread
@@ -289,50 +480,148 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
-        /// Opens the Add Part dialog
+        /// Executes the search with current filter values
+        /// Triggered by the Search button
         /// </summary>
-        private void AddPart(object? parameter)
+        private void ExecuteSearch(object? parameter)
         {
-            var dialog = new PartDialog(Categories, null, _localization);
-            if (dialog.ShowDialog() == true && dialog.Part != null)
+            FilterParts();
+        }
+
+        /// <summary>
+        /// Resets all filters and shows all parts
+        /// Triggered by the Reset button
+        /// </summary>
+        private void ExecuteReset(object? parameter)
+        {
+            // Clear search term
+            SearchTerm = string.Empty;
+
+            // Clear category filter
+            SelectedCategory = null;
+
+            // Clear brand filter
+            SelectedBrand = null;
+
+            // Clear year filter
+            SelectedYear = null;
+
+            // Clear model filter
+            SelectedModel = null;
+
+            // Reload all parts from database
+            Task.Run(async () =>
             {
-                _ = AddPartToDatabase(dialog.Part);
+                var allParts = await _dataService.GetAllPartsAsync();
+
+                // Update UI on main thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Parts.Clear();
+                    foreach (var part in allParts)
+                    {
+                        Parts.Add(part);
+                    }
+                });
+            });
+        }
+
+        /// <summary>
+        /// Handles pending image uploads after a part is saved
+        /// </summary>
+        private async Task HandlePendingImageUploadsAsync(PartDialog dialog)
+        {
+            if (dialog.HasPendingImages && dialog.Part.Id > 0 && dialog.TemporaryImages.Count > 0)
+            {
+                try
+                {
+                    var imageService = ServiceContainer.GetService<IImageStorageService>();
+                    var uploadedPaths = new List<string>();
+
+                    // Get existing images
+                    if (dialog.Part.ImagePaths.Count > 0)
+                    {
+                        uploadedPaths.AddRange(dialog.Part.ImagePaths);
+                    }
+
+                    // Upload temporary images
+                    for (int i = 0; i < dialog.TemporaryImages.Count; i++)
+                    {
+                        string imageUrl;
+
+                        if (imageService != null)
+                        {
+                            // Upload to Cloudinary
+                            var publicId = $"{dialog.Part.Id}_{uploadedPaths.Count}";
+                            imageUrl = await imageService.UploadImageBytesAsync(dialog.TemporaryImages[i].ProcessedData, publicId);
+                        }
+                        else
+                        {
+                            // Save locally
+                            var appDataPath = Path.Combine(
+                                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                                "CarPartStoreApp",
+                                "Images");
+
+                            if (!Directory.Exists(appDataPath))
+                                Directory.CreateDirectory(appDataPath);
+
+                            var fileName = $"{dialog.Part.Id}_{uploadedPaths.Count}.jpg";
+                            var destFilePath = Path.Combine(appDataPath, fileName);
+                            await File.WriteAllBytesAsync(destFilePath, dialog.TemporaryImages[i].ProcessedData);
+                            imageUrl = destFilePath;
+                        }
+
+                        uploadedPaths.Add(imageUrl);
+                    }
+
+                    // Update part with all image paths
+                    dialog.Part.ImagePaths = uploadedPaths;
+
+                    // Save the updated part to database
+                    await _dataService.UpdatePartAsync(dialog.Part);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Error uploading images: {ex.Message}", "Error",
+                        System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
             }
         }
 
         /// <summary>
-        /// Adds a part to the database
+        /// Opens the Add Part dialog
         /// </summary>
-        private async Task AddPartToDatabase(CarPart part)
+        private async void AddPart(object? parameter)
         {
-            var newId = await _dataService.AddPartAsync(part);
-            if (newId > 0)
+            var dialog = new PartDialog(Categories, null, _localization);
+            if (dialog.ShowDialog() == true && dialog.Part != null)
             {
-                part.Id = newId;
-                // Set the category name for display
-                var category = Categories.FirstOrDefault(c => c.Id == part.CategoryId);
-                if (category != null)
-                {
-                    part.CategoryName = category.Name;
-                }
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    Parts.Add(part);
-                });
+                // Save part to database first
+                var newId = await _dataService.AddPartAsync(dialog.Part);
+                dialog.Part.Id = newId;
+
+                // Handle pending image uploads
+                await HandlePendingImageUploadsAsync(dialog);
+
+                // Refresh parts list
+                await LoadDataAsync();
             }
         }
 
         /// <summary>
         /// Opens the Edit Part dialog for the selected part
         /// </summary>
-        private void EditPart(object? parameter)
+        private async void EditPart(object? parameter)
         {
             if (SelectedPart == null) return;
 
             var dialog = new PartDialog(Categories, SelectedPart, _localization);
             if (dialog.ShowDialog() == true && dialog.Part != null)
             {
-                _ = UpdatePartInDatabase(dialog.Part);
+                await UpdatePartInDatabase(dialog.Part);
+                // Refresh data to show updated images
+                await LoadDataAsync();
             }
         }
 
@@ -352,7 +641,7 @@ namespace CarPartStoreApp.ViewModels
             var success = await _dataService.UpdatePartAsync(part);
             if (success)
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     var existingPart = Parts.FirstOrDefault(p => p.Id == part.Id);
                     if (existingPart != null)
@@ -363,13 +652,21 @@ namespace CarPartStoreApp.ViewModels
                         existingPart.Description = part.Description;
                         existingPart.CategoryId = part.CategoryId;
                         existingPart.CostPrice = part.CostPrice;
-                        existingPart.RetailPrice = part.RetailPrice;
+                        existingPart.Brand = part.Brand;
                         existingPart.StockQuantity = part.StockQuantity;
                         existingPart.Location = part.Location;
-                        existingPart.Supplier = part.Supplier;
                         existingPart.ImagePath = part.ImagePath;
+<<<<<<< Updated upstream
                         existingPart.Model = part.Model;
                         existingPart.ReleaseDate = part.ReleaseDate;
+=======
+<<<<<<< Updated upstream
+=======
+                        existingPart.ImagePaths = part.ImagePaths;
+                        existingPart.Model = part.Model;
+                        existingPart.ReleaseDate = part.ReleaseDate;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
                         // Set the category name for display
                         var category = Categories.FirstOrDefault(c => c.Id == part.CategoryId);
@@ -406,6 +703,7 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
+<<<<<<< Updated upstream
         /// Deletes a part from the database and its image from Cloudinary/local storage
         /// </summary>
         private async Task DeletePartFromDatabase(CarPart part)
@@ -425,12 +723,68 @@ namespace CarPartStoreApp.ViewModels
                     {
                         MessageBox.Show(
                             $"Warning: Could not delete image from Cloudinary: {ex.Message}\n\nThe part will still be deleted from the database.",
+=======
+<<<<<<< Updated upstream
+        /// Deletes a part from the database
+        /// </summary>
+        private async Task DeletePartFromDatabase(CarPart part)
+        {
+=======
+        /// Deletes a part from the database and ALL images from Cloudinary/local storage
+        /// </summary>
+        private async Task DeletePartFromDatabase(CarPart part)
+        {
+            var imageService = ServiceContainer.GetService<IImageStorageService>();
+
+            // Delete ALL images from Cloudinary or local storage
+            if (part.ImagePaths != null && part.ImagePaths.Count > 0)
+            {
+                var deletionErrors = new List<string>();
+
+                foreach (var imagePath in part.ImagePaths)
+                {
+                    if (string.IsNullOrWhiteSpace(imagePath))
+                        continue;
+
+                    try
+                    {
+                        // Delete Cloudinary images (URLs starting with http)
+                        if (imagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (imageService != null)
+                            {
+                                await imageService.DeleteImageAsync(imagePath);
+                            }
+                        }
+                        // Delete local files
+                        else if (File.Exists(imagePath))
+                        {
+                            File.Delete(imagePath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Collect errors but continue deleting other images
+                        deletionErrors.Add($"- {imagePath}: {ex.Message}");
+                    }
+                }
+
+                // Show warning if any images failed to delete
+                if (deletionErrors.Count > 0)
+                {
+                    var errorMessage = string.Join("\n", deletionErrors);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MessageBox.Show(
+                            $"Warning: Some images could not be deleted:\n\n{errorMessage}\n\nThe part will still be deleted from the database.",
+>>>>>>> Stashed changes
                             "Image Deletion Warning",
                             MessageBoxButton.OK,
                             MessageBoxImage.Warning);
                     });
                 }
             }
+<<<<<<< Updated upstream
             else if (!string.IsNullOrEmpty(part.ImagePath) && File.Exists(part.ImagePath))
             {
                 // Delete local file
@@ -445,6 +799,11 @@ namespace CarPartStoreApp.ViewModels
             }
 
             // Delete part from database
+=======
+
+            // Delete part from database
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             var success = await _dataService.DeletePartAsync(part.Id);
             if (success)
             {
@@ -464,6 +823,31 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+        /// Opens the Part Detail window to display the selected part in read-only mode
+        /// </summary>
+        private void DisplayPart(object? parameter)
+        {
+            if (SelectedPart == null) return;
+
+            var window = new PartDetailWindow(SelectedPart, _localization);
+            window.Owner = Application.Current.MainWindow;
+            window.ShowDialog();
+        }
+
+        /// <summary>
+        /// Determines if a part can be displayed
+        /// </summary>
+        private bool CanDisplayPart(object? parameter)
+        {
+            return SelectedPart != null;
+        }
+
+        /// <summary>
+>>>>>>> Stashed changes
         /// Tests INSERT functionality with dummy data
         /// </summary>
         private async void TestPartInsert(object? parameter)
@@ -499,6 +883,10 @@ namespace CarPartStoreApp.ViewModels
         }
 
         /// <summary>
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         /// Changes the current language
         /// </summary>
         private void ChangeLanguage(object? parameter)
@@ -578,6 +966,7 @@ namespace CarPartStoreApp.ViewModels
             OnPropertyChanged(nameof(LanguageTurkish));
             OnPropertyChanged(nameof(About));
             OnPropertyChanged(nameof(ContextMenuEdit));
+            OnPropertyChanged(nameof(ContextMenuDisplay));
             OnPropertyChanged(nameof(ContextMenuDelete));
 
             // Search and Filter
@@ -586,6 +975,16 @@ namespace CarPartStoreApp.ViewModels
             OnPropertyChanged(nameof(SearchHint));
             OnPropertyChanged(nameof(CategoryLabel));
             OnPropertyChanged(nameof(CategoryHint));
+            OnPropertyChanged(nameof(BrandLabel));
+            OnPropertyChanged(nameof(BrandHint));
+            OnPropertyChanged(nameof(YearLabel));
+            OnPropertyChanged(nameof(YearHint));
+            OnPropertyChanged(nameof(ModelLabel));
+            OnPropertyChanged(nameof(ModelHint));
+            OnPropertyChanged(nameof(ButtonSearch));
+            OnPropertyChanged(nameof(ButtonReset));
+            OnPropertyChanged(nameof(ToolTipSearch));
+            OnPropertyChanged(nameof(ToolTipReset));
 
             // Parts Inventory
             OnPropertyChanged(nameof(InventoryGroupBox));
@@ -594,13 +993,22 @@ namespace CarPartStoreApp.ViewModels
             OnPropertyChanged(nameof(ColumnDescription));
             OnPropertyChanged(nameof(ColumnCategory));
             OnPropertyChanged(nameof(ColumnCost));
-            OnPropertyChanged(nameof(ColumnRetail));
             OnPropertyChanged(nameof(ColumnStock));
             OnPropertyChanged(nameof(ColumnLocation));
+<<<<<<< Updated upstream
             OnPropertyChanged(nameof(ColumnSupplier));
+<<<<<<< Updated upstream
             OnPropertyChanged(nameof(ColumnModel));
             OnPropertyChanged(nameof(ColumnReleaseDate));
             OnPropertyChanged(nameof(ColumnImage));
+=======
+=======
+            OnPropertyChanged(nameof(ColumnBrand));
+            OnPropertyChanged(nameof(ColumnModel));
+            OnPropertyChanged(nameof(ColumnReleaseDate));
+            OnPropertyChanged(nameof(ColumnImage));
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
             // Title
             OnPropertyChanged(nameof(Title));

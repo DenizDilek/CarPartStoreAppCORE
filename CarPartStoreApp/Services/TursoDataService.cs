@@ -131,8 +131,13 @@ namespace CarPartStoreApp.Services
         {
             const string sql = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 ORDER BY p.Name
@@ -144,8 +149,13 @@ namespace CarPartStoreApp.Services
         {
             const string sql = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.Id = @id
@@ -167,9 +177,21 @@ namespace CarPartStoreApp.Services
             var name = part.Name?.Replace("'", "''") ?? "";
             var description = part.Description?.Replace("'", "''") ?? "";
             var location = part.Location?.Replace("'", "''") ?? "";
+<<<<<<< Updated upstream
             var supplier = part.Supplier?.Replace("'", "''") ?? "";
             var imagePath = part.ImagePath?.Replace("'", "''") ?? "";
             var model = part.Model?.Replace("'", "''") ?? "";
+=======
+
+            // Combine multiple image paths with space separator
+            var imagePathValue = part.ImagePaths.Count > 0
+                ? string.Join(" ", part.ImagePaths.Select(p => p?.Replace("'", "''") ?? ""))
+                : "";
+            var imagePath = imagePathValue?.Replace("'", "''") ?? "";
+
+            var model = part.Model?.Replace("'", "''") ?? "";
+            var brand = part.Brand?.Replace("'", "''") ?? "";
+>>>>>>> Stashed changes
             var createdDate = part.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss");
             var lastUpdatedValue = part.LastUpdated.HasValue
                 ? $"'{part.LastUpdated.Value.ToString("yyyy-MM-dd HH:mm:ss")}'"
@@ -178,7 +200,17 @@ namespace CarPartStoreApp.Services
                 ? part.ReleaseDate.Value.ToString()
                 : "NULL";
 
+<<<<<<< Updated upstream
             var sql = $"INSERT INTO Parts (PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated) VALUES ('{partNumber}', '{name}', '{description}', {part.CategoryId}, {part.CostPrice}, {part.RetailPrice}, {part.StockQuantity}, '{location}', '{supplier}', '{imagePath}', '{model}', {releaseYearValue}, '{createdDate}', {lastUpdatedValue})";
+=======
+            // Handle PartNumber NULL properly
+            var partNumberSql = string.IsNullOrEmpty(partNumber) ? "NULL" : $"'{partNumber}'";
+
+            // Format decimal using invariant culture (dot separator)
+            var costPriceSql = part.CostPrice.ToString(CultureInfo.InvariantCulture);
+
+            var sql = $"INSERT INTO Parts (PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, ImagePath, Model, Brand, ReleaseYear, CreatedDate, LastUpdated) VALUES ({partNumberSql}, '{name}', '{description}', {part.CategoryId}, {costPriceSql}, {part.StockQuantity}, '{location}', '{imagePath}', '{model}', '{brand}', {releaseYearValue}, '{createdDate}', {lastUpdatedValue})";
+>>>>>>> Stashed changes
 
             var result = await ExecuteQueryAsync(sql, null);
 
@@ -191,6 +223,7 @@ namespace CarPartStoreApp.Services
             var name = part.Name?.Replace("'", "''") ?? "";
             var description = part.Description?.Replace("'", "''") ?? "";
             var location = part.Location?.Replace("'", "''") ?? "";
+<<<<<<< Updated upstream
             var supplier = part.Supplier?.Replace("'", "''") ?? "";
             var imagePath = part.ImagePath?.Replace("'", "''") ?? "";
             var model = part.Model?.Replace("'", "''") ?? "";
@@ -200,6 +233,29 @@ namespace CarPartStoreApp.Services
                 : "NULL";
 
             var sql = $"UPDATE Parts SET PartNumber = '{partNumber}', Name = '{name}', Description = '{description}', CategoryId = {part.CategoryId}, CostPrice = {part.CostPrice}, RetailPrice = {part.RetailPrice}, StockQuantity = {part.StockQuantity}, Location = '{location}', Supplier = '{supplier}', ImagePath = '{imagePath}', Model = '{model}', ReleaseYear = {releaseYearValue}, LastUpdated = '{lastUpdated}' WHERE Id = {part.Id}";
+=======
+
+            // Combine multiple image paths with space separator
+            var imagePathValue = part.ImagePaths.Count > 0
+                ? string.Join(" ", part.ImagePaths.Select(p => p?.Replace("'", "''") ?? ""))
+                : "";
+            var imagePath = imagePathValue?.Replace("'", "''") ?? "";
+
+            var model = part.Model?.Replace("'", "''") ?? "";
+            var brand = part.Brand?.Replace("'", "''") ?? "";
+            var lastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            // Handle PartNumber NULL properly
+            var partNumberSql = string.IsNullOrEmpty(partNumber) ? "NULL" : $"'{partNumber}'";
+
+            // Handle ReleaseYear NULL properly
+            var releaseYearSql = part.ReleaseDate.HasValue ? part.ReleaseDate.Value.ToString() : "NULL";
+
+            // Format decimal using invariant culture (dot separator)
+            var costPriceSql = part.CostPrice.ToString(CultureInfo.InvariantCulture);
+
+            var sql = $"UPDATE Parts SET PartNumber = {partNumberSql}, Name = '{name}', Description = '{description}', CategoryId = {part.CategoryId}, CostPrice = {costPriceSql}, StockQuantity = {part.StockQuantity}, Location = '{location}', ImagePath = '{imagePath}', Model = '{model}', Brand = '{brand}', ReleaseYear = {releaseYearSql}, LastUpdated = '{lastUpdated}' WHERE Id = {part.Id}";
+>>>>>>> Stashed changes
 
             var result = await ExecuteQueryAsync(sql, null);
             return result.AffectedRowCount > 0;
@@ -244,17 +300,29 @@ namespace CarPartStoreApp.Services
                 @"
                     CREATE TABLE IF NOT EXISTS Parts (
                         Id INTEGER PRIMARY KEY,
+<<<<<<< Updated upstream
                         PartNumber TEXT NOT NULL UNIQUE,
+=======
+                        PartNumber TEXT UNIQUE,
+>>>>>>> Stashed changes
                         Name TEXT NOT NULL,
                         Description TEXT,
                         CategoryId INTEGER,
                         CostPrice REAL NOT NULL DEFAULT 0,
+<<<<<<< Updated upstream
                         RetailPrice REAL NOT NULL DEFAULT 0,
                         StockQuantity INTEGER NOT NULL DEFAULT 0,
                         Location TEXT,
                         Supplier TEXT,
                         ImagePath TEXT,
                         Model TEXT,
+=======
+                        StockQuantity INTEGER NOT NULL DEFAULT 0,
+                        Location TEXT,
+                        ImagePath TEXT,
+                        Model TEXT,
+                        Brand TEXT,
+>>>>>>> Stashed changes
                         ReleaseYear INTEGER,
                         CreatedDate TEXT DEFAULT CURRENT_TIMESTAMP,
                         LastUpdated TEXT,
@@ -270,6 +338,7 @@ namespace CarPartStoreApp.Services
             }
 
             // Migration: Add new columns to existing Parts table if they don't exist
+<<<<<<< Updated upstream
             // SQLite doesn't support ALTER TABLE ADD COLUMN IF NOT EXISTS, so we use try-catch
             try
             {
@@ -341,16 +410,100 @@ namespace CarPartStoreApp.Services
                     CREATE TABLE IF NOT EXISTS Parts_New (
                         Id INTEGER PRIMARY KEY,
                         PartNumber TEXT NOT NULL UNIQUE,
+=======
+            // Note: These columns are already in the CREATE TABLE statement above, so these migrations are for backwards compatibility
+            // SQLite doesn't support ALTER TABLE ADD COLUMN IF NOT EXISTS, so we use try-catch
+            // Skip these migrations as the schema already includes them
+            // try
+            // {
+            //     await ExecuteQueryAsync("ALTER TABLE Parts ADD COLUMN Model TEXT");
+            //     Console.WriteLine("[TURSO MIGRATION] Added 'Model' column to Parts table");
+            // }
+            // catch
+            // {
+            //     // Column already exists or table structure error - safe to ignore
+            //     // Console.WriteLine($"[TURSO MIGRATION] 'Model' column may already exist");
+            // }
+
+            // try
+            // {
+            //     await ExecuteQueryAsync("ALTER TABLE Parts ADD COLUMN Brand TEXT");
+            //     Console.WriteLine("[TURSO MIGRATION] Added 'Brand' column to Parts table");
+            // }
+            // catch
+            // {
+            //     // Column already exists or table structure error - safe to ignore
+            //     // Console.WriteLine($"[TURSO MIGRATION] 'Brand' column may already exist");
+            // }
+
+            // // Migrate ReleaseDate TEXT to ReleaseYear INTEGER
+            // // First add the new ReleaseYear column
+            // try
+            // {
+            //     await ExecuteQueryAsync("ALTER TABLE Parts ADD COLUMN ReleaseYear INTEGER");
+            //     Console.WriteLine("[TURSO MIGRATION] Added 'ReleaseYear' column to Parts table");
+
+            //     // Migrate data from ReleaseDate to ReleaseYear (extract year from date string)
+            //     await ExecuteQueryAsync(@"
+            //         UPDATE Parts
+            //         SET ReleaseYear = CAST(substr(COALESCE(ReleaseDate, '0000'), 1, 4) AS INTEGER)
+            //         WHERE ReleaseYear IS NULL AND ReleaseDate IS NOT NULL
+            //     ");
+            //     Console.WriteLine("[TURSO MIGRATION] Migrated data from ReleaseDate to ReleaseYear");
+
+            //     // Drop old ReleaseDate column if it exists
+            //     try
+            //     {
+            //         await ExecuteQueryAsync(@"
+            //             CREATE TABLE Parts_New AS
+            //             SELECT Id, PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice,
+            //                    StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear,
+            //                    CreatedDate, LastUpdated
+            //             FROM Parts
+            //         ");
+            //         await ExecuteQueryAsync("DROP TABLE Parts");
+            //         await ExecuteQueryAsync("ALTER TABLE Parts_New RENAME TO Parts");
+            //         Console.WriteLine("[TURSO MIGRATION] Removed old 'ReleaseDate' column from Parts table");
+            //     }
+            //     catch (Exception dropEx)
+            //     {
+            //         Console.WriteLine($"[TURSO MIGRATION] Could not drop ReleaseDate column (may not exist): {dropEx.Message}");
+            //     }
+            // }
+            // catch
+            // {
+            //     // Column already exists or table structure error - safe to ignore
+            //     // Console.WriteLine($"[TURSO MIGRATION] 'ReleaseYear' column may already exist");
+            // }
+
+            // Migration: Make PartNumber nullable (remove NOT NULL constraint)
+            // SQLite/Turso doesn't support ALTER TABLE to remove NOT NULL, so we recreate the table
+            try
+            {
+                // Create new table with PartNumber nullable
+                await ExecuteQueryAsync(@"
+                    CREATE TABLE IF NOT EXISTS Parts_WithNullablePartNumber (
+                        Id INTEGER PRIMARY KEY,
+                        PartNumber TEXT UNIQUE,
+>>>>>>> Stashed changes
                         Name TEXT NOT NULL,
                         Description TEXT,
                         CategoryId INTEGER,
                         CostPrice REAL NOT NULL DEFAULT 0,
+<<<<<<< Updated upstream
                         RetailPrice REAL NOT NULL DEFAULT 0,
                         StockQuantity INTEGER NOT NULL DEFAULT 0,
                         Location TEXT,
                         Supplier TEXT,
                         ImagePath TEXT,
                         Model TEXT,
+=======
+                        StockQuantity INTEGER NOT NULL DEFAULT 0,
+                        Location TEXT,
+                        ImagePath TEXT,
+                        Model TEXT,
+                        Brand TEXT,
+>>>>>>> Stashed changes
                         ReleaseYear INTEGER,
                         CreatedDate TEXT DEFAULT CURRENT_TIMESTAMP,
                         LastUpdated TEXT,
@@ -358,18 +511,31 @@ namespace CarPartStoreApp.Services
                     )
                 ");
 
+<<<<<<< Updated upstream
                 // Migrate data, keeping only the first occurrence of each PartNumber
                 await ExecuteQueryAsync(@"
                     INSERT INTO Parts_New (Id, PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated)
                     SELECT MIN(Id) as Id, PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated
                     FROM Parts
                     GROUP BY PartNumber
+=======
+                // Copy data from old table to new table (allowing NULL PartNumber)
+                await ExecuteQueryAsync(@"
+                    INSERT INTO Parts_WithNullablePartNumber (Id, PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, ImagePath, Model, Brand, ReleaseYear, CreatedDate, LastUpdated)
+                    SELECT Id, PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, ImagePath, Model, Brand, ReleaseYear, CreatedDate, LastUpdated
+                    FROM Parts
+>>>>>>> Stashed changes
                 ");
 
                 // Drop old table and rename new one
                 await ExecuteQueryAsync("DROP TABLE Parts");
+<<<<<<< Updated upstream
                 await ExecuteQueryAsync("ALTER TABLE Parts_New RENAME TO Parts");
                 // Console.WriteLine("[TURSO MIGRATION] Added UNIQUE constraint to PartNumber and removed duplicates");
+=======
+                await ExecuteQueryAsync("ALTER TABLE Parts_WithNullablePartNumber RENAME TO Parts");
+                // Console.WriteLine("[TURSO MIGRATION] Made PartNumber nullable (removed NOT NULL constraint)");
+>>>>>>> Stashed changes
             }
             catch
             {
@@ -411,8 +577,13 @@ namespace CarPartStoreApp.Services
         {
             const string sql = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.CategoryId = @categoryId
@@ -425,14 +596,23 @@ namespace CarPartStoreApp.Services
         {
             const string sql = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.PartNumber LIKE @searchTerm
                    OR p.Name LIKE @searchTerm
                    OR p.Description LIKE @searchTerm
+<<<<<<< Updated upstream
                    OR p.Supplier LIKE @searchTerm
+=======
+                   OR p.Brand LIKE @searchTerm
+>>>>>>> Stashed changes
                 ORDER BY p.Name
             ";
             var parameters = new Dictionary<string, object> { ["@searchTerm"] = $"%{searchTerm}%" };
@@ -523,6 +703,10 @@ namespace CarPartStoreApp.Services
                 if (firstResult.Type != "ok" || firstResult.Response == null)
                 {
                     // Console.WriteLine($"[TURSO ERROR] First result is not 'ok' or has no response. Type: {firstResult.Type}");
+<<<<<<< Updated upstream
+=======
+                    // Console.WriteLine($"[TURSO ERROR] Full response: {responseJson}");
+>>>>>>> Stashed changes
 
                     if (_debugTrackingEnabled && queryInfo != null)
                     {
@@ -803,7 +987,11 @@ namespace CarPartStoreApp.Services
             {
                 // Handle ReleaseYear/ReleaseDate column (migration compatibility)
                 int? releaseYear = null;
+<<<<<<< Updated upstream
                 var releaseYearValue = ExtractValue(row[13]);
+=======
+                var releaseYearValue = ExtractValue(row[12]);
+>>>>>>> Stashed changes
 
                 if (releaseYearValue != null)
                 {
@@ -860,6 +1048,19 @@ namespace CarPartStoreApp.Services
                     }
                 }
 
+<<<<<<< Updated upstream
+=======
+                // Parse ImagePath into multiple paths if needed
+                var imagePath = Convert.ToString(ExtractValue(row[9])) ?? string.Empty;
+                var imagePaths = new List<string>();
+                if (!string.IsNullOrWhiteSpace(imagePath))
+                {
+                    // Split by space or newline
+                    var paths = imagePath.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    imagePaths.AddRange(paths);
+                }
+
+>>>>>>> Stashed changes
                 parts.Add(new CarPart
                 {
                     Id = Convert.ToInt32(ExtractValue(row[0])),
@@ -869,6 +1070,7 @@ namespace CarPartStoreApp.Services
                     CategoryId = Convert.ToInt32(ExtractValue(row[4])),
                     CategoryName = Convert.ToString(ExtractValue(row[5])) ?? string.Empty,
                     CostPrice = Convert.ToDecimal(ExtractValue(row[6])),
+<<<<<<< Updated upstream
                     RetailPrice = Convert.ToDecimal(ExtractValue(row[7])),
                     StockQuantity = Convert.ToInt32(ExtractValue(row[8])),
                     Location = Convert.ToString(ExtractValue(row[9])) ?? string.Empty,
@@ -879,6 +1081,18 @@ namespace CarPartStoreApp.Services
                     CreatedDate = DateTime.TryParse(Convert.ToString(ExtractValue(row[14])), out var createdDate)
                         ? createdDate : DateTime.Now,
                     LastUpdated = DateTime.TryParse(Convert.ToString(ExtractValue(row[15])), out var updatedDate)
+=======
+                    StockQuantity = Convert.ToInt32(ExtractValue(row[7])),
+                    Location = Convert.ToString(ExtractValue(row[8])) ?? string.Empty,
+                    ImagePath = imagePath, // Keep single path for backward compatibility
+                    ImagePaths = imagePaths, // Set the collection
+                    Model = Convert.ToString(ExtractValue(row[10])),
+                    Brand = Convert.ToString(ExtractValue(row[11])) ?? string.Empty,
+                    ReleaseDate = releaseYear,
+                    CreatedDate = DateTime.TryParse(Convert.ToString(ExtractValue(row[13])), out var createdDate)
+                        ? createdDate : DateTime.Now,
+                    LastUpdated = DateTime.TryParse(Convert.ToString(ExtractValue(row[14])), out var updatedDate)
+>>>>>>> Stashed changes
                         ? updatedDate : null
                 });
             }

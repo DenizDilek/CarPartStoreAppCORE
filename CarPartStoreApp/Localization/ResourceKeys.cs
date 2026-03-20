@@ -35,11 +35,11 @@ namespace CarPartStoreApp.Localization
         public const string ColumnDescription = "PartsInventory.ColumnDescription";
         public const string ColumnCategory = "PartsInventory.ColumnCategory";
         public const string ColumnCost = "PartsInventory.ColumnCost";
-        public const string ColumnRetail = "PartsInventory.ColumnRetail";
         public const string ColumnStock = "PartsInventory.ColumnStock";
         public const string ColumnLocation = "PartsInventory.ColumnLocation";
-        public const string ColumnSupplier = "PartsInventory.ColumnSupplier";
-        public const string ColumnImage = "PartsInventory.ColumnImage";
+        public const string ColumnBrand = "PartsInventory.ColumnBrand";
+        public const string ColumnModel = "PartsInventory.ColumnModel";
+        public const string ColumnReleaseDate = "PartsInventory.ColumnReleaseDate";
 
         // PartDialog
         public const string DialogAddPartTitle = "PartDialog.TitleAdd";
@@ -49,10 +49,11 @@ namespace CarPartStoreApp.Localization
         public const string LabelDescription = "PartDialog.LabelDescription";
         public const string LabelCategoryDialog = "PartDialog.LabelCategory";
         public const string LabelCostPrice = "PartDialog.LabelCostPrice";
-        public const string LabelRetailPrice = "PartDialog.LabelRetailPrice";
         public const string LabelStockQuantity = "PartDialog.LabelStockQuantity";
         public const string LabelLocation = "PartDialog.LabelLocation";
-        public const string LabelSupplier = "PartDialog.LabelSupplier";
+        public const string LabelBrand = "PartDialog.LabelBrand";
+        public const string LabelModel = "PartDialog.LabelModel";
+        public const string LabelReleaseDate = "PartDialog.LabelReleaseDate";
         public const string LabelImage = "PartDialog.LabelImage";
         public const string ButtonSave = "PartDialog.ButtonSave";
         public const string ButtonCancel = "PartDialog.ButtonCancel";
@@ -62,10 +63,11 @@ namespace CarPartStoreApp.Localization
         public const string ToolTipName = "PartDialog.ToolTipName";
         public const string ToolTipDescription = "PartDialog.ToolTipDescription";
         public const string ToolTipCostPrice = "PartDialog.ToolTipCostPrice";
-        public const string ToolTipRetailPrice = "PartDialog.ToolTipRetailPrice";
         public const string ToolTipStockQuantity = "PartDialog.ToolTipStockQuantity";
         public const string ToolTipLocation = "PartDialog.ToolTipLocation";
-        public const string ToolTipSupplier = "PartDialog.ToolTipSupplier";
+        public const string ToolTipBrand = "PartDialog.ToolTipBrand";
+        public const string ToolTipModel = "PartDialog.ToolTipModel";
+        public const string ToolTipReleaseDate = "PartDialog.ToolTipReleaseDate";
         public const string ToolTipImage = "PartDialog.ToolTipImage";
 
         // Messages

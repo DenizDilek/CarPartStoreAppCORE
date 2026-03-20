@@ -30,10 +30,16 @@ namespace CarPartStoreApp.ViewModels
                 Description = "Dummy test part for INSERT verification",
                 CategoryId = 1,
                 CostPrice = 15,
+<<<<<<< Updated upstream
                 RetailPrice = 25,
                 StockQuantity = 50,
                 Location = "Shelf A1",
                 Supplier = "Test Supplier Inc",
+=======
+                StockQuantity = 50,
+                Location = "Shelf A1",
+                Brand = "Bosch",
+>>>>>>> Stashed changes
                 ImagePath = "",
                 Model = "Civic",
                 ReleaseDate = DateTime.Now.Year,

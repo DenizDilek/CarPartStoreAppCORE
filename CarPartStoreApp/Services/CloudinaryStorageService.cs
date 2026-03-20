@@ -85,6 +85,60 @@ namespace CarPartStoreApp.Services
         }
 
         /// <summary>
+<<<<<<< Updated upstream
+=======
+        /// Uploads an image from byte array to Cloudinary
+        /// The image is stored in the "car-parts" folder with the public ID
+        /// </summary>
+        /// <param name="imageData">Image data as byte array</param>
+        /// <param name="publicId">Public ID for the image</param>
+        /// <returns>The URL of the uploaded image</returns>
+        /// <exception cref="ArgumentException">Thrown when image data is null or empty</exception>
+        /// <exception cref="InvalidOperationException">Thrown when upload fails</exception>
+        public async Task<string> UploadImageBytesAsync(byte[] imageData, string publicId)
+        {
+            if (imageData == null || imageData.Length == 0)
+                throw new ArgumentException("Image data is required", nameof(imageData));
+
+            if (string.IsNullOrEmpty(publicId))
+                throw new ArgumentException("Public ID is required", nameof(publicId));
+
+            try
+            {
+                using var stream = new MemoryStream(imageData);
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(publicId, stream),
+                    PublicId = $"{Folder}/{publicId}",
+                    Folder = Folder,
+                    Overwrite = false, // Don't overwrite - create new image
+                    Transformation = new Transformation().Quality("auto").FetchFormat("auto")
+                };
+
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+                if (uploadResult.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new InvalidOperationException(
+                        $"Cloudinary upload failed with status {uploadResult.StatusCode}: {uploadResult.Error?.Message}");
+                }
+
+                if (uploadResult.SecureUrl == null)
+                {
+                    throw new InvalidOperationException("Cloudinary upload succeeded but no URL returned");
+                }
+
+                return uploadResult.SecureUrl.ToString();
+            }
+            catch (Exception ex) when (!(ex is ArgumentException || ex is InvalidOperationException))
+            {
+                // Wrap any Cloudinary-specific exceptions
+                throw new InvalidOperationException($"Failed to upload image to Cloudinary: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+>>>>>>> Stashed changes
         /// Deletes an image from Cloudinary
         /// Can accept either a full URL or a public ID
         /// </summary>

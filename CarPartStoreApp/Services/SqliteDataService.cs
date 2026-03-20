@@ -36,8 +36,17 @@ namespace CarPartStoreApp.Services
             var command = connection.CreateCommand();
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
+<<<<<<< Updated upstream
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 ORDER BY p.Name
@@ -60,8 +69,17 @@ namespace CarPartStoreApp.Services
             var command = connection.CreateCommand();
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
+<<<<<<< Updated upstream
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.Id = @Id
@@ -85,11 +103,23 @@ namespace CarPartStoreApp.Services
             var command = connection.CreateCommand();
             command.CommandText = @"
                 INSERT INTO Parts (PartNumber, Name, Description, CategoryId,
+<<<<<<< Updated upstream
                                    CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath,
                                    Model, ReleaseYear, CreatedDate, LastUpdated)
                 VALUES (@PartNumber, @Name, @Description, @CategoryId,
                         @CostPrice, @RetailPrice, @StockQuantity, @Location, @Supplier, @ImagePath,
+<<<<<<< Updated upstream
                         @Model, @ReleaseYear, @CreatedDate, @LastUpdated);
+=======
+                        @CreatedDate, @LastUpdated);
+=======
+                                   CostPrice, StockQuantity, Location, ImagePath,
+                                   Model, Brand, ReleaseYear, CreatedDate, LastUpdated)
+                VALUES (@PartNumber, @Name, @Description, @CategoryId,
+                        @CostPrice, @StockQuantity, @Location, @ImagePath,
+                        @Model, @Brand, @ReleaseYear, @CreatedDate, @LastUpdated);
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 SELECT last_insert_rowid();
             ";
 
@@ -98,13 +128,28 @@ namespace CarPartStoreApp.Services
             command.Parameters.AddWithValue("@Description", part.Description);
             command.Parameters.AddWithValue("@CategoryId", part.CategoryId);
             command.Parameters.AddWithValue("@CostPrice", part.CostPrice);
-            command.Parameters.AddWithValue("@RetailPrice", part.RetailPrice);
             command.Parameters.AddWithValue("@StockQuantity", part.StockQuantity);
             command.Parameters.AddWithValue("@Location", part.Location);
+<<<<<<< Updated upstream
             command.Parameters.AddWithValue("@Supplier", part.Supplier);
             command.Parameters.AddWithValue("@ImagePath", (object?)part.ImagePath ?? DBNull.Value);
+<<<<<<< Updated upstream
             command.Parameters.AddWithValue("@Model", (object?)part.Model ?? DBNull.Value);
             command.Parameters.AddWithValue("@ReleaseYear", (object?)part.ReleaseDate ?? DBNull.Value);
+=======
+=======
+
+            // Combine multiple image paths with space separator
+            var imagePathValue = part.ImagePaths.Count > 0
+                ? string.Join(" ", part.ImagePaths)
+                : string.Empty;
+            command.Parameters.AddWithValue("@ImagePath", (object?)imagePathValue ?? DBNull.Value);
+
+            command.Parameters.AddWithValue("@Model", (object?)part.Model ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Brand", (object?)part.Brand ?? DBNull.Value);
+            command.Parameters.AddWithValue("@ReleaseYear", (object?)part.ReleaseDate ?? DBNull.Value);
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             command.Parameters.AddWithValue("@CreatedDate", part.CreatedDate);
             command.Parameters.AddWithValue("@LastUpdated", (object?)part.LastUpdated ?? DBNull.Value);
 
@@ -125,13 +170,20 @@ namespace CarPartStoreApp.Services
                     Description = @Description,
                     CategoryId = @CategoryId,
                     CostPrice = @CostPrice,
-                    RetailPrice = @RetailPrice,
                     StockQuantity = @StockQuantity,
                     Location = @Location,
-                    Supplier = @Supplier,
                     ImagePath = @ImagePath,
+<<<<<<< Updated upstream
                     Model = @Model,
                     ReleaseYear = @ReleaseYear,
+=======
+<<<<<<< Updated upstream
+=======
+                    Model = @Model,
+                    Brand = @Brand,
+                    ReleaseYear = @ReleaseYear,
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                     LastUpdated = @LastUpdated
                 WHERE Id = @Id
             ";
@@ -141,13 +193,28 @@ namespace CarPartStoreApp.Services
             command.Parameters.AddWithValue("@Description", part.Description);
             command.Parameters.AddWithValue("@CategoryId", part.CategoryId);
             command.Parameters.AddWithValue("@CostPrice", part.CostPrice);
-            command.Parameters.AddWithValue("@RetailPrice", part.RetailPrice);
             command.Parameters.AddWithValue("@StockQuantity", part.StockQuantity);
             command.Parameters.AddWithValue("@Location", part.Location);
+<<<<<<< Updated upstream
             command.Parameters.AddWithValue("@Supplier", part.Supplier);
             command.Parameters.AddWithValue("@ImagePath", (object?)part.ImagePath ?? DBNull.Value);
+<<<<<<< Updated upstream
             command.Parameters.AddWithValue("@Model", (object?)part.Model ?? DBNull.Value);
             command.Parameters.AddWithValue("@ReleaseYear", (object?)part.ReleaseDate ?? DBNull.Value);
+=======
+=======
+
+            // Combine multiple image paths with space separator
+            var imagePathValue = part.ImagePaths.Count > 0
+                ? string.Join(" ", part.ImagePaths)
+                : string.Empty;
+            command.Parameters.AddWithValue("@ImagePath", (object?)imagePathValue ?? DBNull.Value);
+
+            command.Parameters.AddWithValue("@Model", (object?)part.Model ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Brand", (object?)part.Brand ?? DBNull.Value);
+            command.Parameters.AddWithValue("@ReleaseYear", (object?)part.ReleaseDate ?? DBNull.Value);
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             command.Parameters.AddWithValue("@LastUpdated", DateTime.Now);
             command.Parameters.AddWithValue("@Id", part.Id);
 
@@ -223,8 +290,17 @@ namespace CarPartStoreApp.Services
             var command = connection.CreateCommand();
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
+<<<<<<< Updated upstream
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.CategoryId = @CategoryId
@@ -251,14 +327,23 @@ namespace CarPartStoreApp.Services
             var command = connection.CreateCommand();
             command.CommandText = @"
                 SELECT p.Id, p.PartNumber, p.Name, p.Description, p.CategoryId, c.Name as CategoryName,
+<<<<<<< Updated upstream
                        p.CostPrice, p.RetailPrice, p.StockQuantity, p.Location, p.Supplier, p.ImagePath,
+<<<<<<< Updated upstream
                        p.Model, p.ReleaseYear, p.CreatedDate, p.LastUpdated
+=======
+                       p.CreatedDate, p.LastUpdated
+=======
+                       p.CostPrice, p.StockQuantity, p.Location, p.ImagePath, p.Model, p.Brand,
+                       p.ReleaseYear, p.CreatedDate, p.LastUpdated
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 FROM Parts p
                 LEFT JOIN Categories c ON p.CategoryId = c.Id
                 WHERE p.PartNumber LIKE @SearchTerm
                    OR p.Name LIKE @SearchTerm
                    OR p.Description LIKE @SearchTerm
-                   OR p.Supplier LIKE @SearchTerm
+                   OR p.Brand LIKE @SearchTerm
                 ORDER BY p.Name
             ";
             command.Parameters.AddWithValue("@SearchTerm", $"%{searchTerm}%");
@@ -274,6 +359,7 @@ namespace CarPartStoreApp.Services
 
         /// <summary>
         /// Maps a SQLite data reader to a CarPart object
+<<<<<<< Updated upstream
         /// Handles migration from old ReleaseDate TEXT column to new ReleaseYear INTEGER column
         /// </summary>
         private CarPart MapReaderToCarPart(SqliteDataReader reader)
@@ -281,6 +367,21 @@ namespace CarPartStoreApp.Services
             // Handle ReleaseYear/ReleaseDate column (migration compatibility)
             int? releaseYear = null;
             int releaseYearIndex = 13;
+=======
+<<<<<<< Updated upstream
+        /// </summary>
+        private CarPart MapReaderToCarPart(SqliteDataReader reader)
+        {
+=======
+        /// Handles migration from old ReleaseDate TEXT column to new ReleaseYear INTEGER column
+        /// Handles parsing multiple image paths from space-separated ImagePath column
+        /// </summary>
+        private CarPart MapReaderToCarPart(SqliteDataReader reader)
+        {
+            // Handle ReleaseYear/ReleaseDate column (migration compatibility)
+            int? releaseYear = null;
+            int releaseYearIndex = 12;
+>>>>>>> Stashed changes
 
             if (reader.IsDBNull(releaseYearIndex))
             {
@@ -306,6 +407,20 @@ namespace CarPartStoreApp.Services
                 }
             }
 
+<<<<<<< Updated upstream
+=======
+            // Parse ImagePath into multiple paths if needed
+            var imagePath = reader.IsDBNull(9) ? string.Empty : reader.GetString(9);
+            var imagePaths = new List<string>();
+            if (!string.IsNullOrWhiteSpace(imagePath))
+            {
+                // Split by space or newline
+                var paths = imagePath.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                imagePaths.AddRange(paths);
+            }
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             return new CarPart
             {
                 Id = reader.GetInt32(0),
@@ -315,15 +430,32 @@ namespace CarPartStoreApp.Services
                 CategoryId = reader.GetInt32(4),
                 CategoryName = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
                 CostPrice = reader.GetDecimal(6),
+<<<<<<< Updated upstream
                 RetailPrice = reader.GetDecimal(7),
                 StockQuantity = reader.GetInt32(8),
                 Location = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
                 Supplier = reader.IsDBNull(10) ? string.Empty : reader.GetString(10),
                 ImagePath = reader.IsDBNull(11) ? string.Empty : reader.GetString(11),
+<<<<<<< Updated upstream
                 Model = reader.IsDBNull(12) ? null : reader.GetString(12),
                 ReleaseDate = releaseYear,
                 CreatedDate = DateTime.Parse(reader.GetString(14)),
                 LastUpdated = reader.IsDBNull(15) ? (DateTime?)null : DateTime.Parse(reader.GetString(15))
+=======
+                CreatedDate = DateTime.Parse(reader.GetString(12)),
+                LastUpdated = reader.IsDBNull(13) ? (DateTime?)null : DateTime.Parse(reader.GetString(13))
+=======
+                StockQuantity = reader.GetInt32(7),
+                Location = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
+                ImagePath = imagePath, // Keep single path for backward compatibility
+                ImagePaths = imagePaths, // Set the collection
+                Model = reader.IsDBNull(10) ? null : reader.GetString(10),
+                Brand = reader.IsDBNull(11) ? string.Empty : reader.GetString(11),
+                ReleaseDate = releaseYear,
+                CreatedDate = DateTime.Parse(reader.GetString(13)),
+                LastUpdated = reader.IsDBNull(14) ? (DateTime?)null : DateTime.Parse(reader.GetString(14))
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             };
         }
 

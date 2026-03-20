@@ -13,21 +13,44 @@
     "MenuLanguageEnglish": "English",
     "MenuLanguageTurkish": "Turkish",
     "ContextMenuEdit": "Edit Part",
+    "ContextMenuDisplay": "Display Part",
     "ContextMenuDelete": "Delete Part"
   },
   "SearchAndFilter": {
     "GroupBox": "Search and Filter",
     "LabelSearch": "Search:",
-    "HintSearchText": "Search by part number, name, description, or supplier",
+    "HintSearchText": "Search by part number, name, description, or brand",
     "LabelCategory": "Category:",
+<<<<<<< Updated upstream
     "HintCategoryText": "Filter by category",
+=======
+<<<<<<< Updated upstream
+    "HintCategoryText": "Filter by category"
+=======
+    "HintCategoryText": "Filter by category",
+    "LabelBrand": "Brand:",
+    "HintBrandText": "Filter by brand",
+    "LabelYear": "Year:",
+    "HintYearText": "Filter by release year",
+    "LabelModel": "Model:",
+    "HintModelText": "Filter by model",
+>>>>>>> Stashed changes
     "LabelDatabase": "Database:",
     "HintDatabaseText": "Select database source (Local or Cloud)",
     "DatabaseLocal": "Local",
     "DatabaseCloud": "Cloud",
     "DatabaseSwitching": "Switching to {0} database...",
     "DatabaseSwitchSuccess": "Successfully switched to {0} database",
+<<<<<<< Updated upstream
     "DatabaseSwitchError": "Failed to switch to {0} database: {1}"
+=======
+    "DatabaseSwitchError": "Failed to switch to {0} database: {1}",
+    "ButtonSearch": "Search",
+    "ButtonReset": "Reset Filters",
+    "ToolTipSearch": "Search parts with current filters",
+    "ToolTipReset": "Clear all filters and show all parts"
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   },
   "PartsInventory": {
     "GroupBox": "Parts Inventory",
@@ -36,13 +59,22 @@
     "ColumnDescription": "Description",
     "ColumnCategory": "Category",
     "ColumnCost": "Cost",
-    "ColumnRetail": "Retail",
     "ColumnStock": "Stock",
     "ColumnLocation": "Location",
+<<<<<<< Updated upstream
     "ColumnSupplier": "Supplier",
+<<<<<<< Updated upstream
     "ColumnImage": "Image",
     "ColumnModel": "Model",
     "ColumnReleaseDate": "Release Date"
+=======
+    "ColumnImage": "Image"
+=======
+    "ColumnBrand": "Brand",
+    "ColumnModel": "Model",
+    "ColumnReleaseDate": "Release Date"
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   },
   "PartDialog": {
     "TitleAdd": "Add New Part",
@@ -52,10 +84,15 @@
     "LabelDescription": "Description:",
     "LabelCategory": "Category:",
     "LabelCostPrice": "Cost Price:",
-    "LabelRetailPrice": "Retail Price:",
     "LabelStockQuantity": "Stock Quantity:",
     "LabelLocation": "Location:",
+<<<<<<< Updated upstream
     "LabelSupplier": "Supplier:",
+=======
+    "LabelBrand": "Brand:",
+    "LabelModel": "Model:",
+    "LabelReleaseDate": "Release Date:",
+>>>>>>> Stashed changes
     "LabelImage": "Image:",
     "LabelModel": "Model:",
     "LabelReleaseDate": "Release Date:",
@@ -67,10 +104,11 @@
     "ToolTipName": "Example: Oil Filter, Brake Pads, Spark Plug",
     "ToolTipDescription": "Example: Standard oil filter for most engines",
     "ToolTipCostPrice": "Example: 5.99 for cost price",
-    "ToolTipRetailPrice": "Example: 12.99 for retail price",
     "ToolTipStockQuantity": "Example: 50 for stock quantity",
     "ToolTipLocation": "Example: Aisle 1, Shelf 2",
-    "ToolTipSupplier": "Example: AutoParts Inc, BrakeMaster",
+    "ToolTipBrand": "Example: Bosch, ACDelco, NGK",
+    "ToolTipModel": "Example: Civic, Camry, F-150",
+    "ToolTipReleaseDate": "Example: 2020 for release year",
     "ToolTipImage": "Add a product image for this part"
   },
   "Messages": {

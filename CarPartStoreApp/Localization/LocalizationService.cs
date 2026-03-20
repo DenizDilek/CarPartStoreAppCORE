@@ -120,25 +120,9 @@ namespace CarPartStoreApp.Localization
             }
 
             System.Diagnostics.Debug.WriteLine($"Loaded {_languageResources.Count} languages");
-
-            // Show debug info in message box for visibility
-            try
-            {
-                System.Windows.MessageBox.Show(
-                    $"Resources loaded from: {baseDirectory}\n" +
-                    $"Languages loaded: {_languageResources.Count}\n" +
-                    $"Sample keys: {string.Join(", ", _languageResources.Values.FirstOrDefault()?.Keys.Take(3) ?? new List<string>())}",
-                    "Debug - Resource Loading Info",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-            }
-            catch
-            {
-                System.Diagnostics.Debug.WriteLine("MessageBox not available yet");
-            }
+        }
 
         /// <summary>
-        }
 
         /// <summary>
         /// Loads JSON resource files from a directory
