@@ -16,24 +16,13 @@ import type {
 } from '@/types';
 
 // API base URL - connects to the WPF embedded API server
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-const API_BASE_URL = 'http://localhost:5000/api';
-=======
->>>>>>> Stashed changes
 // Can be configured via environment variable VITE_API_URL
 const API_BASE_URL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
   : 'http://localhost:5000/api';
 
 // Log which API URL is being used
-<<<<<<< Updated upstream
 console.log(`🔧 API Client initialized with base URL: ${API_BASE_URL}`);
-=======
-console.log(`API Client initialized with base URL: ${API_BASE_URL}`);
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
 /**
  * Create and configure axios instance
