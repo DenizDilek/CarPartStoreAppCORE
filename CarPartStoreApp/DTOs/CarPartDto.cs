@@ -9,9 +9,8 @@ namespace CarPartStoreApp.DTOs
     {
         public int Id { get; set; }
 
-        [Required]
         [StringLength(50)]
-        public required string PartNumber { get; set; }
+        public string? PartNumber { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -39,7 +38,7 @@ namespace CarPartStoreApp.DTOs
         [StringLength(100)]
         public string? Brand { get; set; }
 
-        [StringLength(255)]
+        [StringLength(2000)]
         public string? ImagePath { get; set; }
 
         [StringLength(50)]
@@ -57,9 +56,8 @@ namespace CarPartStoreApp.DTOs
     /// </summary>
     public class CreatePartDto
     {
-        [Required]
         [StringLength(50)]
-        public required string PartNumber { get; set; }
+        public string? PartNumber { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -85,7 +83,7 @@ namespace CarPartStoreApp.DTOs
         [StringLength(100)]
         public string? Brand { get; set; }
 
-        [StringLength(255)]
+        [StringLength(2000)]
         public string? ImagePath { get; set; }
 
         [StringLength(50)]
@@ -99,9 +97,8 @@ namespace CarPartStoreApp.DTOs
     /// </summary>
     public class UpdatePartDto
     {
-        [Required]
         [StringLength(50)]
-        public required string PartNumber { get; set; }
+        public string? PartNumber { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -127,7 +124,7 @@ namespace CarPartStoreApp.DTOs
         [StringLength(100)]
         public string? Brand { get; set; }
 
-        [StringLength(255)]
+        [StringLength(2000)]
         public string? ImagePath { get; set; }
 
         [StringLength(50)]

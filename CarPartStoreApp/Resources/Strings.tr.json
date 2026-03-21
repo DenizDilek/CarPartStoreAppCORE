@@ -1,138 +1,98 @@
 {
   "MainWindow": {
-    "Title": "Otomobil Parçası Depo Yönetimi",
+    "Title": "Otomobil Parcasi Depo Yonetimi",
     "MenuFile": "_Dosya",
-    "MenuAddPart": "_Yeni Parça Ekle...",
+    "MenuAddPart": "_Yeni Parca Ekle...",
     "MenuTest": "_Test INSERT...",
-    "MenuExit": "_Çıkış",
-    "MenuEdit": "_Düzenle",
-    "MenuDeletePart": "_Seçili Parçayı Sil",
-    "MenuHelp": "_Yardım",
-    "MenuAbout": "_Hakkında",
+    "MenuExit": "_Cikis",
+    "MenuEdit": "_Duzenle",
+    "MenuDeletePart": "_Secili Parcayi Sil",
+    "MenuHelp": "_Yardim",
+    "MenuAbout": "_Hakkinda",
     "MenuLanguage": "_Dil",
-    "MenuLanguageEnglish": "İngilizce",
-    "MenuLanguageTurkish": "Türkçe",
-    "ContextMenuEdit": "Parçayı Düzenle",
-    "ContextMenuDisplay": "Parçayı Göster",
-    "ContextMenuDelete": "Parçayı Sil"
+    "MenuLanguageEnglish": "Ingilizce",
+    "MenuLanguageTurkish": "Turkce",
+    "ContextMenuEdit": "Parcayi Duzenle",
+    "ContextMenuDisplay": "Parcayi Goster",
+    "ContextMenuDelete": "Parcayi Sil"
   },
   "SearchAndFilter": {
     "GroupBox": "Ara ve Filtrele",
     "LabelSearch": "Ara:",
-    "HintSearchText": "Parça numarası, ad, açıklama veya markaya göre ara",
+    "HintSearchText": "Parca numarasi, ad, aciklama veya markaya gore ara",
     "LabelCategory": "Kategori:",
-<<<<<<< Updated upstream
-    "HintCategoryText": "Kategoriye göre filtrele",
-=======
-<<<<<<< Updated upstream
-    "HintCategoryText": "Kategoriye göre filtrele"
-=======
-    "HintCategoryText": "Kategoriye göre filtrele",
+    "HintCategoryText": "Kategoriye gore filtrele",
     "LabelBrand": "Marka:",
-    "HintBrandText": "Markaya göre filtrele",
-    "LabelYear": "Yıl:",
-    "HintYearText": "Çıkış yılına göre filtrele",
+    "HintBrandText": "Markaya gore filtrele",
+    "LabelYear": "Yil:",
+    "HintYearText": "Cikis yilina gore filtrele",
     "LabelModel": "Model:",
-    "HintModelText": "Modele göre filtrele",
->>>>>>> Stashed changes
-    "LabelDatabase": "Veritabanı:",
-    "HintDatabaseText": "Veritabanı kaynağını seçin (Yerel veya Bulut)",
+    "HintModelText": "Modele gore filtrele",
+    "LabelDatabase": "Veritabani:",
+    "HintDatabaseText": "Veritabani kaynagini secin (Yerel veya Bulut)",
     "DatabaseLocal": "Yerel",
     "DatabaseCloud": "Bulut",
-    "DatabaseSwitching": "{0} veritabanına geçiliyor...",
-    "DatabaseSwitchSuccess": "Başarıyla {0} veritabanına geçildi",
-<<<<<<< Updated upstream
-    "DatabaseSwitchError": "{0} veritabanına geçilemedi: {1}"
-=======
-    "DatabaseSwitchError": "{0} veritabanına geçilemedi: {1}",
+    "DatabaseSwitching": "{0} veritabanina geciliyor...",
+    "DatabaseSwitchSuccess": "Basariyla {0} veritabanina gecildi",
+    "DatabaseSwitchError": "{0} veritabanina gecilemedi: {1}",
     "ButtonSearch": "Ara",
-    "ButtonReset": "Filtreleri Sıfırla",
-    "ToolTipSearch": "Mevcut filtrelerle parça ara",
-    "ToolTipReset": "Tüm filtreleri temizle ve tüm parçaları göster"
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+    "ButtonReset": "Filtreleri Sifirla",
+    "ToolTipSearch": "Mevcut filtrelerle parca ara",
+    "ToolTipReset": "Tum filtreleri temizle ve tum parcalari goster"
   },
   "PartsInventory": {
-    "GroupBox": "Parça Envanteri",
-    "ColumnPartNumber": "Parça #",
+    "GroupBox": "Parca Envanteri",
+    "ColumnPartNumber": "Parca #",
     "ColumnName": "Ad",
-    "ColumnDescription": "Açıklama",
+    "ColumnDescription": "Aciklama",
     "ColumnCategory": "Kategori",
     "ColumnCost": "Maliyet",
+    "ColumnRetail": "Satis",
     "ColumnStock": "Stok",
     "ColumnLocation": "Konum",
-<<<<<<< Updated upstream
-    "ColumnSupplier": "Tedarikçi",
-<<<<<<< Updated upstream
-    "ColumnImage": "Resim",
-    "ColumnModel": "Model",
-    "ColumnReleaseDate": "Çıkış Tarihi"
-=======
-    "ColumnImage": "Görsel"
-=======
     "ColumnBrand": "Marka",
     "ColumnModel": "Model",
-    "ColumnReleaseDate": "Çıkış Tarihi"
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+    "ColumnReleaseDate": "Cikis Tarihi",
+    "ColumnImage": "Resim"
   },
   "PartDialog": {
-    "TitleAdd": "Yeni Parça Ekle",
-    "TitleEdit": "Parçayı Düzenle",
-    "LabelPartNumber": "Parça Numarası:",
+    "TitleAdd": "Yeni Parca Ekle",
+    "TitleEdit": "Parcayi Duzenle",
+    "LabelPartNumber": "Parca Numarasi:",
     "LabelName": "Ad:",
-    "LabelDescription": "Açıklama:",
+    "LabelDescription": "Aciklama:",
     "LabelCategory": "Kategori:",
-    "LabelCostPrice": "Maliyet Fiyatı:",
-    "LabelStockQuantity": "Stok Miktarı:",
+    "LabelCostPrice": "Maliyet Fiyati:",
+    "LabelStockQuantity": "Stok Miktari:",
     "LabelLocation": "Konum:",
-<<<<<<< Updated upstream
-    "LabelSupplier": "Tedarikçi:",
-<<<<<<< Updated upstream
-    "LabelImage": "Resim:",
-    "LabelModel": "Model:",
-    "LabelReleaseDate": "Çıkış Tarihi:",
-=======
-    "LabelImage": "Görsel:",
-=======
     "LabelBrand": "Marka:",
     "LabelModel": "Model:",
-    "LabelReleaseDate": "Çıkış Tarihi:",
-    "LabelImage": "Resim:",
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+    "LabelReleaseDate": "Cikis Tarihi:",
+    "LabelImage": "Resimler:",
     "ButtonSave": "Kaydet",
-    "ButtonCancel": "İptal",
-    "ButtonUploadImage": "Resim Yükle...",
-    "ButtonRemoveImage": "Resimi Kaldır",
-    "ToolTipPartNumber": "Örnek: ENG-001, BRK-001, SUS-001",
-    "ToolTipName": "Örnek: Yağ Filtresi, Fren Balataları, Buji",
-    "ToolTipDescription": "Örnek: Çoğu motor için standart yağ filtresi",
-    "ToolTipCostPrice": "Örnek: Maliyet fiyatı için 5.99",
-    "ToolTipStockQuantity": "Örnek: Stok miktarı için 50",
-    "ToolTipLocation": "Örnek: Koridor 1, Raf 2",
-<<<<<<< Updated upstream
-    "ToolTipSupplier": "Örnek: AutoParts Inc, BrakeMaster",
-<<<<<<< Updated upstream
-    "ToolTipImage": "Bu parça için ürün resmini ekle"
-=======
-    "ToolTipImage": "Bu parça için ürün görseli ekle"
-=======
-    "ToolTipBrand": "Örnek: Bosch, ACDelco, NGK",
-    "ToolTipModel": "Örnek: Civic, Camry, F-150",
-    "ToolTipReleaseDate": "Örnek: Çıkış yılı için 2020",
-    "ToolTipImage": "Bu parça için ürün resmini ekle"
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+    "ButtonCancel": "Iptal",
+    "ButtonUploadImage": "Resim Ekle...",
+    "ButtonRemoveImage": "Resimi Kaldir",
+    "ButtonRemoveAllImages": "Tum Resimleri Kaldir",
+    "ToolTipPartNumber": "Ornek: ENG-001, BRK-001, SUS-001 (Istege bagli)",
+    "ToolTipName": "Ornek: Yag Filtresi, Fren Balatalari, Buji",
+    "ToolTipDescription": "Ornek: Cogu motor icin standart yag filtresi",
+    "ToolTipCostPrice": "Ornek: Maliyet fiyati icin 5.99",
+    "ToolTipStockQuantity": "Ornek: Stok miktari icin 50",
+    "ToolTipLocation": "Ornek: Koridor 1, Raf 2",
+    "ToolTipBrand": "Ornek: Bosch, ACDelco, NGK",
+    "ToolTipModel": "Ornek: Civic, Camry, F-150",
+    "ToolTipReleaseDate": "Ornek: Cikis yili icin 2020",
+    "ToolTipImage": "Bu parca icin urun resimleri ekle (maksimum 6 resim)"
   },
   "Messages": {
-    "DeleteConfirmation": "'{0}' parçasını silmek istediğinizden emin misiniz?",
-    "DeleteConfirmationTitle": "Silme Onayı",
-    "ValidationErrorPartNumber": "Lütfen bir parça numarası girin.",
-    "ValidationErrorName": "Lütfen bir parça adı girin.",
-    "ValidationErrorTitle": "Doğrulama Hatası",
-    "AboutText": "Otomobil Parçası Depo Yönetim Sistemi\n\nSürüm 1.0\n\nOtomobil parçası envanterini yönetmek için bir WPF uygulaması.",
-    "AboutTitle": "CarParStorageApp Hakkında"
+    "DeleteConfirmation": "'{0}' parcasini silmek istediginizden emin misiniz?",
+    "DeleteConfirmationTitle": "Silme Onayi",
+    "ValidationErrorPartNumber": "Lutfen bir parca numarasi girin.",
+    "ValidationErrorName": "Lutfen bir parca adi girin.",
+    "ValidationErrorTitle": "Dogrulama Hatasi",
+    "AboutText": "Otomobil Parcasi Depo Yonetim Sistemi\n\nSurum 1.0\n\nOtomobil parcasi envanterini yonetmek icin bir WPF uygulamasi.",
+    "AboutTitle": "CarParStorageApp Hakkinda"
   },
   "Common": {
     "Uncategorized": "Kategorisiz"

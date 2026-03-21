@@ -1,10 +1,13 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function MainNav() {
+  const { t } = useTranslation();
+
   const navItems = [
-    { path: '/about', label: 'About' },
-    { path: '/parts', label: 'Parts' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/about', labelKey: 'nav.about' },
+    { path: '/parts', labelKey: 'nav.parts' },
+    { path: '/contact', labelKey: 'nav.contact' },
   ];
 
   return (
@@ -21,7 +24,7 @@ export default function MainNav() {
                 }`
               }
             >
-              {item.label}
+              {t(item.labelKey)}
             </NavLink>
           ))}
         </div>

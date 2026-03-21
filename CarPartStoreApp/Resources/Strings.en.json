@@ -21,12 +21,6 @@
     "LabelSearch": "Search:",
     "HintSearchText": "Search by part number, name, description, or brand",
     "LabelCategory": "Category:",
-<<<<<<< Updated upstream
-    "HintCategoryText": "Filter by category",
-=======
-<<<<<<< Updated upstream
-    "HintCategoryText": "Filter by category"
-=======
     "HintCategoryText": "Filter by category",
     "LabelBrand": "Brand:",
     "HintBrandText": "Filter by brand",
@@ -34,23 +28,17 @@
     "HintYearText": "Filter by release year",
     "LabelModel": "Model:",
     "HintModelText": "Filter by model",
->>>>>>> Stashed changes
     "LabelDatabase": "Database:",
     "HintDatabaseText": "Select database source (Local or Cloud)",
     "DatabaseLocal": "Local",
     "DatabaseCloud": "Cloud",
     "DatabaseSwitching": "Switching to {0} database...",
     "DatabaseSwitchSuccess": "Successfully switched to {0} database",
-<<<<<<< Updated upstream
-    "DatabaseSwitchError": "Failed to switch to {0} database: {1}"
-=======
     "DatabaseSwitchError": "Failed to switch to {0} database: {1}",
     "ButtonSearch": "Search",
     "ButtonReset": "Reset Filters",
     "ToolTipSearch": "Search parts with current filters",
     "ToolTipReset": "Clear all filters and show all parts"
->>>>>>> Stashed changes
->>>>>>> Stashed changes
   },
   "PartsInventory": {
     "GroupBox": "Parts Inventory",
@@ -59,22 +47,13 @@
     "ColumnDescription": "Description",
     "ColumnCategory": "Category",
     "ColumnCost": "Cost",
+    "ColumnRetail": "Retail",
     "ColumnStock": "Stock",
     "ColumnLocation": "Location",
-<<<<<<< Updated upstream
-    "ColumnSupplier": "Supplier",
-<<<<<<< Updated upstream
-    "ColumnImage": "Image",
-    "ColumnModel": "Model",
-    "ColumnReleaseDate": "Release Date"
-=======
-    "ColumnImage": "Image"
-=======
     "ColumnBrand": "Brand",
     "ColumnModel": "Model",
-    "ColumnReleaseDate": "Release Date"
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+    "ColumnReleaseDate": "Release Date",
+    "ColumnImage": "Image"
   },
   "PartDialog": {
     "TitleAdd": "Add New Part",
@@ -86,21 +65,16 @@
     "LabelCostPrice": "Cost Price:",
     "LabelStockQuantity": "Stock Quantity:",
     "LabelLocation": "Location:",
-<<<<<<< Updated upstream
-    "LabelSupplier": "Supplier:",
-=======
     "LabelBrand": "Brand:",
     "LabelModel": "Model:",
     "LabelReleaseDate": "Release Date:",
->>>>>>> Stashed changes
-    "LabelImage": "Image:",
-    "LabelModel": "Model:",
-    "LabelReleaseDate": "Release Date:",
+    "LabelImage": "Images:",
     "ButtonSave": "Save",
     "ButtonCancel": "Cancel",
-    "ButtonUploadImage": "Upload Image...",
+    "ButtonUploadImage": "Add Image...",
     "ButtonRemoveImage": "Remove Image",
-    "ToolTipPartNumber": "Example: ENG-001, BRK-001, SUS-001",
+    "ButtonRemoveAllImages": "Remove All Images",
+    "ToolTipPartNumber": "Example: ENG-001, BRK-001, SUS-001 (Optional)",
     "ToolTipName": "Example: Oil Filter, Brake Pads, Spark Plug",
     "ToolTipDescription": "Example: Standard oil filter for most engines",
     "ToolTipCostPrice": "Example: 5.99 for cost price",
@@ -109,7 +83,7 @@
     "ToolTipBrand": "Example: Bosch, ACDelco, NGK",
     "ToolTipModel": "Example: Civic, Camry, F-150",
     "ToolTipReleaseDate": "Example: 2020 for release year",
-    "ToolTipImage": "Add a product image for this part"
+    "ToolTipImage": "Add product images for this part (up to 6 images)"
   },
   "Messages": {
     "DeleteConfirmation": "Are you sure you want to delete '{0}'?",

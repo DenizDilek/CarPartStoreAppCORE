@@ -12,6 +12,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import MainHeader from '@/components/layout/MainHeader';
 import MainNav from '@/components/layout/MainNav';
 import MainFooter from '@/components/layout/MainFooter';
+import SEO from '@/components/seo/SEO';
 import AboutPage from './pages/AboutPage';
 import PartsList from './pages/PartsList';
 import PartDetail from './pages/PartDetail';
@@ -53,6 +54,11 @@ function App() {
     >
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          {/* Default SEO - can be overridden by page-specific SEO */}
+          <SEO
+            title="CarPartStore"
+            description="Your trusted source for quality car parts. Browse our catalog of automotive parts and accessories."
+          />
           <div className="min-h-screen bg-background font-sans flex flex-col">
             {/* Header - Logo + Search Bar */}
             <MainHeader />

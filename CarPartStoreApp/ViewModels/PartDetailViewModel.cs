@@ -75,11 +75,14 @@ namespace CarPartStoreApp.ViewModels
         {
             PartImages.Clear();
 
-            if (Part.ImagePaths.Count > 0)
+            // Parse image paths from single string (space-separated)
+            var imagePaths = Part.ImagePath?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
+
+            if (imagePaths.Length > 0)
             {
-                for (int i = 0; i < Part.ImagePaths.Count; i++)
+                for (int i = 0; i < imagePaths.Length; i++)
                 {
-                    PartImages.Add(new PartImageItem(Part.ImagePaths[i], i, Part.ImagePaths.Count));
+                    PartImages.Add(new PartImageItem(imagePaths[i], i, imagePaths.Length));
                 }
             }
         }
@@ -96,7 +99,7 @@ namespace CarPartStoreApp.ViewModels
         public string LabelBrand => _localization.GetString("PartDialog.LabelBrand");
         public string LabelModel => _localization.GetString("PartDialog.LabelModel");
         public string LabelReleaseDate => _localization.GetString("PartDialog.LabelReleaseDate");
-        public string ImagesTitle => $"Images ({Part.ImagePaths.Count})";
+        public string ImagesTitle => $"Images ({PartImages.Count})";
         public string CloseButton => _localization.GetString("PartDialog.ButtonCancel");
     }
 

@@ -79,7 +79,7 @@ namespace CarPartStoreApp.Controllers
             var newId = await _dataService.AddPartAsync(part);
             part.Id = newId;
 
-            return CreatedAtAction(nameof(GetPart), part.Id);
+            return CreatedAtAction(nameof(GetPart), new { id = part.Id }, MapToDto(part));
         }
 
         /// <summary>
@@ -185,25 +185,11 @@ namespace CarPartStoreApp.Controllers
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
                 StockQuantity = dto.StockQuantity,
-<<<<<<< Updated upstream
                 Location = dto.Location ?? string.Empty,
-                Supplier = dto.Supplier ?? string.Empty,
+                Brand = dto.Brand,
                 ImagePath = dto.ImagePath ?? string.Empty,
                 Model = dto.Model,
                 ReleaseDate = dto.ReleaseDate,
-=======
-<<<<<<< Updated upstream
-                Location = dto.Location,
-                Supplier = dto.Supplier,
-                ImagePath = dto.ImagePath,
-=======
-                Location = dto.Location ?? string.Empty,
-                Brand = dto.Brand ?? string.Empty,
-                ImagePath = dto.ImagePath ?? string.Empty,
-                Model = dto.Model,
-                ReleaseDate = dto.ReleaseDate,
->>>>>>> Stashed changes
->>>>>>> Stashed changes
                 CreatedDate = DateTime.Now
             };
         }
@@ -218,25 +204,11 @@ namespace CarPartStoreApp.Controllers
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
                 StockQuantity = dto.StockQuantity,
-<<<<<<< Updated upstream
                 Location = dto.Location ?? string.Empty,
-                Supplier = dto.Supplier ?? string.Empty,
+                Brand = dto.Brand,
                 ImagePath = dto.ImagePath ?? string.Empty,
                 Model = dto.Model,
                 ReleaseDate = dto.ReleaseDate
-=======
-<<<<<<< Updated upstream
-                Location = dto.Location,
-                Supplier = dto.Supplier,
-                ImagePath = dto.ImagePath
-=======
-                Location = dto.Location ?? string.Empty,
-                Brand = dto.Brand ?? string.Empty,
-                ImagePath = dto.ImagePath ?? string.Empty,
-                Model = dto.Model,
-                ReleaseDate = dto.ReleaseDate
->>>>>>> Stashed changes
->>>>>>> Stashed changes
             };
         }
     }

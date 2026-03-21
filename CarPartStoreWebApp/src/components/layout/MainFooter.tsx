@@ -1,11 +1,14 @@
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function MainFooter() {
+  const { t } = useTranslation();
+
   const footerLinks = [
-    { path: '/about', label: 'About' },
-    { path: '/parts', label: 'Parts' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/about', label: t('footer.about') },
+    { path: '/parts', label: t('footer.parts') },
+    { path: '/contact', label: t('footer.contact') },
   ];
 
   return (
@@ -16,16 +19,16 @@ export default function MainFooter() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-2xl">🚗</span>
-              <h3 className="text-lg font-semibold">CarParts Store</h3>
+              <h3 className="text-lg font-semibold">{t('footer.title')}</h3>
             </div>
             <p className="text-sm text-muted-foreground">
-              Your trusted source for quality car parts. Genuine parts, fast delivery, expert support.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.contactUs')}</h3>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4" />
@@ -44,7 +47,7 @@ export default function MainFooter() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
             <div className="flex flex-col gap-2">
               {footerLinks.map((link) => (
                 <NavLink
@@ -61,7 +64,7 @@ export default function MainFooter() {
 
         {/* Copyright */}
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} CarParts Store. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {t('footer.copyright')}</p>
         </div>
       </div>
     </footer>

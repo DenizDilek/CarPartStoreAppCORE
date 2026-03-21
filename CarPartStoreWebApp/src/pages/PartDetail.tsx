@@ -4,6 +4,7 @@
  */
 
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { usePart } from '@/hooks/useParts';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { ImageGallery } from '@/components/part-detail/image-gallery';
 import PlaceholderImage from '@/components/common/PlaceholderImage';
+import SEO from '@/components/seo/SEO';
 import {
   ArrowLeft,
   Package,
@@ -22,6 +24,7 @@ import {
 } from 'lucide-react';
 
 export default function PartDetail() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const partId = parseInt(id || '0');
 
@@ -55,14 +58,14 @@ export default function PartDetail() {
         <Card className="border-destructive max-w-md mx-auto">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold text-foreground mb-2">Part Not Found</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-2">{t('partDetail.notFound')}</h3>
             <p className="text-muted-foreground mb-6 text-center">
-              {(error as Error)?.message || 'The part you are looking for does not exist.'}
+              {(error as Error)?.message || t('partDetail.notFoundMessage')}
             </p>
             <Link to="/parts">
               <Button className="bg-primary hover:bg-primary/90">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Parts
+                {t('partDetail.backToParts')}
               </Button>
             </Link>
           </CardContent>
@@ -82,16 +85,16 @@ export default function PartDetail() {
   };
 
   const getStockLabel = (quantity: number): string => {
-    if (quantity === 0) return 'Out of Stock';
-    if (quantity < 5) return 'Low Stock';
-    return 'In Stock';
+    if (quantity === 0) return t('common.outOfStock');
+    if (quantity < 5) return t('common.lowStock');
+    return t('common.inStock');
   };
 
   // Format currency
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('tr-TR', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'TRY',
     }).format(amount);
   };
 
@@ -105,15 +108,47 @@ export default function PartDetail() {
 
   const title = titleParts.join(' ');
 
+  // Build SEO title with priority: PartNumber (SKU) > Brand > Year > Name
+  const seoTitleParts: string[] = [];
+  if (part.partNumber) {
+    seoTitleParts.push(`SKU: ${part.partNumber}`);
+  }
+  if (part.brand) {
+    seoTitleParts.push(part.brand);
+  }
+  if (part.releaseYear) {
+    seoTitleParts.push(part.releaseYear.toString());
+  }
+  if (part.name) {
+    seoTitleParts.push(part.name);
+  }
+  const seoTitle = seoTitleParts.join(' | ');
+
+  // Get first image for SEO
+  const seoImage = images.length > 0 ? images[0] : undefined;
+
+  // Build SEO description
+  const seoDescription = part.description
+    ? part.description.slice(0, 160)
+    : `${part.name} - ${part.brand || 'Unknown'} ${part.model || ''} ${part.releaseYear || ''}`.trim();
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Dynamic SEO for Part Detail */}
+      <SEO
+        title={seoTitle}
+        description={seoDescription}
+        image={seoImage}
+        url={`/parts/${part.id}`}
+        type="product"
+      />
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <div className="mb-6">
           <Link to="/parts">
             <Button variant="ghost" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Back to Parts
+              {t('partDetail.backToParts')}
             </Button>
           </Link>
         </div>
@@ -157,7 +192,7 @@ export default function PartDetail() {
             {/* Description */}
             {part.description && (
               <div>
-                <h2 className="text-xl font-semibold text-foreground mb-3">Description</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-3">{t('partDetail.description')}</h2>
                 <p className="text-muted-foreground leading-relaxed">{part.description}</p>
               </div>
             )}
@@ -171,7 +206,7 @@ export default function PartDetail() {
                     <div className="flex items-center gap-3">
                       <Hash className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Part Number</p>
+                        <p className="text-xs text-muted-foreground">{t('partDetail.partNumber')}</p>
                         <p className="font-semibold text-foreground font-mono">{part.partNumber}</p>
                       </div>
                     </div>
@@ -185,8 +220,8 @@ export default function PartDetail() {
                   <div className="flex items-center gap-3">
                     <Package className="h-5 w-5 text-primary" />
                     <div>
-                      <p className="text-xs text-muted-foreground">Stock</p>
-                      <p className="font-semibold text-foreground">{part.stockQuantity} units</p>
+                      <p className="text-xs text-muted-foreground">{t('partDetail.stock')}</p>
+                      <p className="font-semibold text-foreground">{part.stockQuantity} {t('common.units')}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -199,7 +234,7 @@ export default function PartDetail() {
                     <div className="flex items-center gap-3">
                       <MapPin className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Location</p>
+                        <p className="text-xs text-muted-foreground">{t('partDetail.location')}</p>
                         <p className="font-semibold text-foreground">{part.location}</p>
                       </div>
                     </div>
@@ -214,7 +249,7 @@ export default function PartDetail() {
                     <div className="flex items-center gap-3">
                       <Car className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Vehicle</p>
+                        <p className="text-xs text-muted-foreground">{t('partDetail.vehicle')}</p>
                         <p className="font-semibold text-foreground">
                           {[part.brand, part.model, part.releaseYear].filter(Boolean).join(' ')}
                         </p>
@@ -234,19 +269,19 @@ export default function PartDetail() {
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-6"
               >
                 <Mail className="mr-2 h-5 w-5" />
-                Contact About This Part
+                {t('partDetail.contactAboutPart')}
               </Button>
             </Link>
 
             {/* Metadata */}
             <div className="text-xs text-muted-foreground space-y-1 pt-4">
-              <p>Added: {new Date(part.createdDate).toLocaleDateString('en-US', {
+              <p>{t('common.added')}: {new Date(part.createdDate).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}</p>
               {part.lastUpdated && (
-                <p>Last updated: {new Date(part.lastUpdated).toLocaleDateString('en-US', {
+                <p>{t('common.lastUpdated')}: {new Date(part.lastUpdated).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',

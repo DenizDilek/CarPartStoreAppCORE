@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PlaceholderImage from '@/components/common/PlaceholderImage';
 import { CarPartDto } from '@/types';
 
@@ -7,6 +8,7 @@ interface PartCardProps {
 }
 
 export default function PartCard({ part }: PartCardProps) {
+  const { t } = useTranslation();
   // Get first image from imagePath (space-separated URLs)
   const firstImage = part.imagePath
     ? part.imagePath.split(' ')[0]
@@ -14,9 +16,9 @@ export default function PartCard({ part }: PartCardProps) {
 
   // Format price - handle undefined/null/NaN
   const price = part.costPrice || 0;
-  const formattedPrice = new Intl.NumberFormat('en-US', {
+  const formattedPrice = new Intl.NumberFormat('tr-TR', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'TRY',
   }).format(price);
 
   // Build title: Brand + Model + Name + ReleaseDate
@@ -107,10 +109,10 @@ export default function PartCard({ part }: PartCardProps) {
             }}
           >
             {part.stockQuantity > 10
-              ? 'In Stock'
+              ? t('common.inStock')
               : part.stockQuantity > 0
-              ? `Low Stock (${part.stockQuantity})`
-              : 'Out of Stock'}
+              ? `${t('common.lowStock')} (${part.stockQuantity})`
+              : t('common.outOfStock')}
           </span>
 
           {/* View Details Button - Visible on Hover */}
@@ -123,7 +125,7 @@ export default function PartCard({ part }: PartCardProps) {
             }}
             className="group-hover:opacity-100"
           >
-            View Details →
+            {t('buttons.viewDetails')} →
           </span>
         </div>
 

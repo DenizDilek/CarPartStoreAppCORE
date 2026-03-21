@@ -6,11 +6,13 @@
 
 import { useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useParts, useCategories } from '@/hooks/useParts';
 import { useDebounce } from '@/hooks/useDebounce';
 import FilterSidebar, { FilterValues } from '@/components/parts/FilterSidebar';
 import PartCardGrid from '@/components/parts/PartCardGrid';
 import { Button } from '@/components/ui/button';
+import SEO from '@/components/seo/SEO';
 
 const ITEMS_PER_PAGE = 16;
 
@@ -18,6 +20,7 @@ const ITEMS_PER_PAGE = 16;
  * Parts List Component (Portfolio-Style)
  */
 function PartsList() {
+  const { t } = useTranslation();
   const { categoryId } = useParams();
   const [searchParams] = useSearchParams();
 
@@ -90,13 +93,13 @@ function PartsList() {
         <div className="rounded-lg border border-destructive bg-destructive/10 p-8 text-center max-w-md mx-auto">
           <div className="text-4xl mb-4">❌</div>
           <p className="text-destructive font-medium mb-4">
-            {(partsError as Error).message || 'Failed to load parts. Please try again.'}
+            {(partsError as Error).message || t('parts.error')}
           </p>
           <Button
             onClick={() => refetchParts()}
             className="bg-primary hover:bg-primary/90"
           >
-            Retry
+            {t('buttons.retry')}
           </Button>
         </div>
       </div>
@@ -105,16 +108,21 @@ function PartsList() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={t('parts.title')}
+        description="Browse our complete catalog of quality car parts. Filter by category, brand, model, and year to find the perfect parts for your vehicle."
+        url="/parts"
+      />
       <div className="container mx-auto px-4 py-8">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-2">
             {filters.categoryId
-              ? categories.find((c) => c.id.toString() === filters.categoryId)?.name || 'Parts'
-              : 'Parts Catalog'}
+              ? categories.find((c) => c.id.toString() === filters.categoryId)?.name || t('parts.title')
+              : t('parts.title')}
           </h1>
           <p className="text-muted-foreground">
-            {parts.length} part{parts.length !== 1 ? 's' : ''} available
+            {t('parts.partsAvailable', { count: parts.length })}
           </p>
         </div>
 

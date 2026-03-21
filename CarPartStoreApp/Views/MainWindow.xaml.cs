@@ -58,25 +58,13 @@ public partial class MainWindow : Window
             PartsDataGrid.Columns[2].Header = ViewModel.ColumnDescription;
             PartsDataGrid.Columns[3].Header = ViewModel.ColumnCategory;
             PartsDataGrid.Columns[4].Header = ViewModel.ColumnCost;
-<<<<<<< Updated upstream
             PartsDataGrid.Columns[5].Header = ViewModel.ColumnRetail;
             PartsDataGrid.Columns[6].Header = ViewModel.ColumnStock;
             PartsDataGrid.Columns[7].Header = ViewModel.ColumnLocation;
-            PartsDataGrid.Columns[8].Header = ViewModel.ColumnSupplier;
-<<<<<<< Updated upstream
+            PartsDataGrid.Columns[8].Header = ViewModel.ColumnBrand;
             PartsDataGrid.Columns[9].Header = ViewModel.ColumnModel;
             PartsDataGrid.Columns[10].Header = ViewModel.ColumnReleaseDate;
             PartsDataGrid.Columns[11].Header = ViewModel.ColumnImage;
-=======
-            PartsDataGrid.Columns[9].Header = ViewModel.ColumnImage;
-=======
-            PartsDataGrid.Columns[5].Header = ViewModel.ColumnStock;
-            PartsDataGrid.Columns[6].Header = ViewModel.ColumnLocation;
-            PartsDataGrid.Columns[7].Header = ViewModel.ColumnBrand;
-            PartsDataGrid.Columns[8].Header = ViewModel.ColumnModel;
-            PartsDataGrid.Columns[9].Header = ViewModel.ColumnReleaseDate;
->>>>>>> Stashed changes
->>>>>>> Stashed changes
         }
     }
 
