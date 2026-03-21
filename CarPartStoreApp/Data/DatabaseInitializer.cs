@@ -50,9 +50,7 @@ namespace CarPartStoreApp.Data
                 {
                     return;
                 }
-                // Console.WriteLine("Initializing Turso database schema...");
                 tursoService.InitializeDatabaseSchemaAsync().GetAwaiter().GetResult();
-                // Console.WriteLine("Turso database initialized successfully!");
             }
             catch
             {
@@ -84,15 +82,14 @@ namespace CarPartStoreApp.Data
             var createPartsTable = @"
                 CREATE TABLE IF NOT EXISTS Parts (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    PartNumber TEXT NOT NULL UNIQUE,
+                    PartNumber TEXT,
                     Name TEXT NOT NULL,
                     Description TEXT,
                     CategoryId INTEGER,
                     CostPrice REAL NOT NULL DEFAULT 0,
-                    RetailPrice REAL NOT NULL DEFAULT 0,
                     StockQuantity INTEGER NOT NULL DEFAULT 0,
                     Location TEXT,
-                    Supplier TEXT,
+                    Brand TEXT,
                     ImagePath TEXT,
                     Model TEXT,
                     ReleaseYear INTEGER,
@@ -121,7 +118,6 @@ namespace CarPartStoreApp.Data
                     WHERE ReleaseYear IS NULL AND ReleaseDate IS NOT NULL
                 ";
                 ExecuteNonQuery(connection, migrationSql);
-                // Console.WriteLine("[SQLITE MIGRATION] Migrated data from ReleaseDate to ReleaseYear");
             }
 
             // Note: We keep the old ReleaseDate column for backward compatibility
@@ -181,19 +177,19 @@ namespace CarPartStoreApp.Data
             ";
             ExecuteNonQuery(connection, seedCategories);
 
-            // Create some sample parts
+            // Create some sample parts (without deprecated RetailPrice and Supplier columns)
             var seedParts = @"
-                INSERT OR IGNORE INTO Parts (PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice, StockQuantity, Location, Supplier, CreatedDate)
+                INSERT OR IGNORE INTO Parts (PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, Brand, CreatedDate)
                 VALUES
-                    ('ENG-001', 'Oil Filter', 'Standard oil filter for most engines', 8, 5.99, 12.99, 50, 'Aisle 1, Shelf 2', 'AutoParts Inc', datetime('now')),
-                    ('ENG-002', 'Air Filter', 'High-flow air filter', 8, 8.99, 18.99, 35, 'Aisle 1, Shelf 3', 'AutoParts Inc', datetime('now')),
-                    ('TRN-001', 'Transmission Gear', 2, 250.00, 500.00, 8, 'Aisle 2, Shelf 1', 'TransCo', datetime('now')),
-                    ('BRK-001', 'Brake Pad Set', 4, 89.99, 120.00, 50, 'Aisle 2, Shelf 1', 'BrakeMaster', datetime('now')),
-                    ('FUE-001', 'Fuel Pump Assembly', 5, 300.00, 450.00, 12, 'Aisle 3, Shelf 4', 'SuspensionPro', datetime('now')),
-                    ('IGN-001', 'Spark Plug Kit', 7, 25.00, 35.00, 150, 'Aisle 4, Shelf 2', 'ElectroParts', datetime('now')),
-                    ('COO-001', 'Radiator Assembly', 8, 125.00, 200.00, 5, 'Aisle 4, Shelf 1', 'RadiatorsRUs', datetime('now')),
-                    ('ELE-001', 'Alternator Assembly', 9, 185.00, 350.00, 20, 'Aisle 4, Shelf 2', 'AlternatorsIntl', datetime('now')),
-                    ('BOI-001', 'Seat Cushion Set', 10, 75.00, 120.00, 40, 'Aisle 4, Shelf 2', 'SeatMasters', datetime('now'));
+                    ('ENG-001', 'Oil Filter', 'Standard oil filter for most engines', 8, 5.99, 50, 'Aisle 1, Shelf 2', 'AutoParts Inc', datetime('now')),
+                    ('ENG-002', 'Air Filter', 'High-flow air filter', 8, 8.99, 35, 'Aisle 1, Shelf 3', 'AutoParts Inc', datetime('now')),
+                    ('TRN-001', 'Transmission Gear', 'Replacement transmission gear', 2, 250.00, 8, 'Aisle 2, Shelf 1', 'TransCo', datetime('now')),
+                    ('BRK-001', 'Brake Pad Set', 'Front brake pad set', 4, 89.99, 50, 'Aisle 2, Shelf 1', 'BrakeMaster', datetime('now')),
+                    ('FUE-001', 'Fuel Pump Assembly', 'Electric fuel pump assembly', 6, 300.00, 12, 'Aisle 3, Shelf 4', 'FuelPro', datetime('now')),
+                    ('IGN-001', 'Spark Plug Kit', 'Iridium spark plug set of 4', 5, 25.00, 150, 'Aisle 4, Shelf 2', 'ElectroParts', datetime('now')),
+                    ('COO-001', 'Radiator Assembly', 'Aluminum radiator assembly', 1, 125.00, 5, 'Aisle 4, Shelf 1', 'RadiatorsRUs', datetime('now')),
+                    ('ELE-001', 'Alternator Assembly', 'Remanufactured alternator', 5, 185.00, 20, 'Aisle 4, Shelf 2', 'AlternatorsIntl', datetime('now')),
+                    ('BOI-001', 'Seat Cushion Set', 'Front seat cushion covers', 7, 75.00, 40, 'Aisle 4, Shelf 2', 'SeatMasters', datetime('now'));
             ";
             ExecuteNonQuery(connection, seedParts);
         }

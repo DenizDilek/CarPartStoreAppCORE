@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -41,6 +42,15 @@ namespace CarPartStoreApp.Views
         public ObservableCollection<TemporaryImageData> PartImages => _partImages;
 
         public System.Collections.ObjectModel.ObservableCollection<Category> Categories { get; set; } = new System.Collections.ObjectModel.ObservableCollection<Category>();
+
+        /// <summary>
+        /// Gets images that need to be uploaded (new local images, not already on Cloudinary)
+        /// Used by parent window to upload images after getting PartId for new parts
+        /// </summary>
+        public IReadOnlyList<TemporaryImageData> PendingUploadImages => _partImages
+            .Where(img => img.ProcessedImageBytes != null || !string.IsNullOrWhiteSpace(img.LocalFilePath))
+            .ToList()
+            .AsReadOnly();
 
         /// <summary>
         /// Gets a localized string by key for XAML binding
@@ -131,6 +141,7 @@ namespace CarPartStoreApp.Views
                 {
                     ImageSource = LoadImageSource(path),
                     ImagePath = path,
+                    IsUploadedToCloud = path.StartsWith("http", StringComparison.OrdinalIgnoreCase),
                     RemoveButtonVisibility = Visibility.Visible
                 };
                 _partImages.Add(imageData);
@@ -167,7 +178,7 @@ namespace CarPartStoreApp.Views
             return null;
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
             // Validate required fields (PartNumber is now optional)
             if (string.IsNullOrWhiteSpace(_part.Name))
@@ -179,14 +190,199 @@ namespace CarPartStoreApp.Views
                 return;
             }
 
-            // Combine all image paths into the Part's ImagePath field
-            var imagePaths = _partImages
-                .Where(img => !string.IsNullOrWhiteSpace(img.ImagePath))
-                .Select(img => img.ImagePath);
-            _part.ImagePath = string.Join(" ", imagePaths);
+            // For existing parts (Part.Id > 0), upload images to Cloudinary immediately
+            // For new parts (Part.Id == 0), parent will handle upload after getting PartId
+            if (_part.Id > 0)
+            {
+                var uploadedUrls = await UploadImagesToCloudinaryAsync(_part.Id);
+                _part.ImagePath = string.Join(" ", uploadedUrls);
+            }
+            else
+            {
+                // For new parts, just combine local paths temporarily
+                // Parent will call UploadPendingImagesAsync after getting PartId
+                var imagePaths = _partImages
+                    .Where(img => !string.IsNullOrWhiteSpace(img.ImagePath))
+                    .Select(img => img.ImagePath);
+                _part.ImagePath = string.Join(" ", imagePaths);
+            }
 
             DialogResult = true;
             Close();
+        }
+
+        /// <summary>
+        /// Uploads all pending images to Cloudinary for a given part ID.
+        /// This method is called by the parent window after saving a new part and getting its ID.
+        /// </summary>
+        /// <param name="partId">The ID of the part (used for naming images in Cloudinary)</param>
+        /// <returns>List of Cloudinary URLs for all images (including previously uploaded ones)</returns>
+        public async Task<List<string>> UploadPendingImagesAsync(int partId)
+        {
+            var imageService = ServiceContainer.GetService<IImageStorageService>();
+            var uploadedUrls = new List<string>();
+
+            if (imageService == null)
+            {
+                // If no image service, just return existing paths
+                foreach (var imageData in _partImages)
+                {
+                    if (!string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        uploadedUrls.Add(imageData.ImagePath);
+                    }
+                }
+                return uploadedUrls;
+            }
+
+            int imageIndex = 0;
+            foreach (var imageData in _partImages)
+            {
+                try
+                {
+                    string cloudinaryUrl;
+
+                    // If already uploaded to Cloudinary, keep the URL
+                    if (imageData.IsUploadedToCloud && !string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        cloudinaryUrl = imageData.ImagePath;
+                    }
+                    // Upload from byte array if available (preferred - already processed)
+                    else if (imageData.ProcessedImageBytes != null && imageData.ProcessedImageBytes.Length > 0)
+                    {
+                        string publicId = $"{partId}_{imageIndex}";
+                        cloudinaryUrl = await imageService.UploadImageAsync(imageData.ProcessedImageBytes, publicId);
+
+                        // Update the image data with the new URL
+                        imageData.ImagePath = cloudinaryUrl;
+                        imageData.IsUploadedToCloud = true;
+                    }
+                    // Upload from local file path if byte array not available
+                    else if (!string.IsNullOrWhiteSpace(imageData.LocalFilePath) && File.Exists(imageData.LocalFilePath))
+                    {
+                        string publicId = $"{partId}_{imageIndex}";
+                        cloudinaryUrl = await imageService.UploadImageAsync(imageData.LocalFilePath, publicId);
+
+                        // Update the image data with the new URL
+                        imageData.ImagePath = cloudinaryUrl;
+                        imageData.IsUploadedToCloud = true;
+                    }
+                    // Fallback to existing path (shouldn't happen normally)
+                    else if (!string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        cloudinaryUrl = imageData.ImagePath;
+                    }
+                    else
+                    {
+                        // Skip images with no data
+                        continue;
+                    }
+
+                    uploadedUrls.Add(cloudinaryUrl);
+                    imageIndex++;
+                }
+                catch (Exception ex)
+                {
+                    // Log error but continue with other images
+                    System.Diagnostics.Debug.WriteLine($"Failed to upload image {imageIndex}: {ex.Message}");
+
+                    // If upload failed but we have an existing path, keep it
+                    if (!string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        uploadedUrls.Add(imageData.ImagePath);
+                        imageIndex++;
+                    }
+                }
+            }
+
+            return uploadedUrls;
+        }
+
+        /// <summary>
+        /// Uploads all local images to Cloudinary for an existing part.
+        /// Called internally during Save for existing parts.
+        /// </summary>
+        /// <param name="partId">The ID of the part</param>
+        /// <returns>List of Cloudinary URLs for all images</returns>
+        private async Task<List<string>> UploadImagesToCloudinaryAsync(int partId)
+        {
+            var imageService = ServiceContainer.GetService<IImageStorageService>();
+            var uploadedUrls = new List<string>();
+
+            if (imageService == null)
+            {
+                // If no image service, just return existing paths
+                foreach (var imageData in _partImages)
+                {
+                    if (!string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        uploadedUrls.Add(imageData.ImagePath);
+                    }
+                }
+                return uploadedUrls;
+            }
+
+            int imageIndex = 0;
+            foreach (var imageData in _partImages)
+            {
+                try
+                {
+                    string cloudinaryUrl;
+
+                    // If already uploaded to Cloudinary, keep the URL
+                    if (imageData.IsUploadedToCloud && !string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        cloudinaryUrl = imageData.ImagePath;
+                    }
+                    // Upload from byte array if available (preferred - already processed)
+                    else if (imageData.ProcessedImageBytes != null && imageData.ProcessedImageBytes.Length > 0)
+                    {
+                        string publicId = $"{partId}_{imageIndex}";
+                        cloudinaryUrl = await imageService.UploadImageAsync(imageData.ProcessedImageBytes, publicId);
+
+                        // Update the image data with the new URL
+                        imageData.ImagePath = cloudinaryUrl;
+                        imageData.IsUploadedToCloud = true;
+                    }
+                    // Upload from local file path if byte array not available
+                    else if (!string.IsNullOrWhiteSpace(imageData.LocalFilePath) && File.Exists(imageData.LocalFilePath))
+                    {
+                        string publicId = $"{partId}_{imageIndex}";
+                        cloudinaryUrl = await imageService.UploadImageAsync(imageData.LocalFilePath, publicId);
+
+                        // Update the image data with the new URL
+                        imageData.ImagePath = cloudinaryUrl;
+                        imageData.IsUploadedToCloud = true;
+                    }
+                    // Fallback to existing path (shouldn't happen normally)
+                    else if (!string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        cloudinaryUrl = imageData.ImagePath;
+                    }
+                    else
+                    {
+                        // Skip images with no data
+                        continue;
+                    }
+
+                    uploadedUrls.Add(cloudinaryUrl);
+                    imageIndex++;
+                }
+                catch (Exception ex)
+                {
+                    // Log error but continue with other images
+                    System.Diagnostics.Debug.WriteLine($"Failed to upload image {imageIndex}: {ex.Message}");
+
+                    // If upload failed but we have an existing path, keep it
+                    if (!string.IsNullOrWhiteSpace(imageData.ImagePath))
+                    {
+                        uploadedUrls.Add(imageData.ImagePath);
+                        imageIndex++;
+                    }
+                }
+            }
+
+            return uploadedUrls;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -274,6 +470,7 @@ namespace CarPartStoreApp.Views
                     OriginalFilePath = sourceFilePath, // Keep track of original file
                     ImagePath = tempFilePath, // Temporary display path
                     ProcessedImageBytes = processedImageBytes, // Store bytes for potential direct upload
+                    IsUploadedToCloud = false, // New image, not yet uploaded
                     RemoveButtonVisibility = Visibility.Visible
                 };
 
@@ -438,6 +635,10 @@ namespace CarPartStoreApp.Views
         public string? LocalFilePath { get; set; }
         public string? OriginalFilePath { get; set; }
         public byte[]? ProcessedImageBytes { get; set; }
+        /// <summary>
+        /// Indicates whether this image has already been uploaded to Cloudinary
+        /// </summary>
+        public bool IsUploadedToCloud { get; set; }
         public Visibility RemoveButtonVisibility { get; set; } = Visibility.Visible;
     }
 }

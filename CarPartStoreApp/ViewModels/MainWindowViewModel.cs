@@ -426,19 +426,40 @@ namespace CarPartStoreApp.ViewModels
             var dialog = new PartDialog(Categories, null, _localization);
             if (dialog.ShowDialog() == true && dialog.Part != null)
             {
-                _ = AddPartToDatabase(dialog.Part);
+                _ = AddPartToDatabaseAsync(dialog.Part, dialog);
             }
         }
 
         /// <summary>
-        /// Adds a part to the database
+        /// Adds a part to the database and uploads images to Cloudinary
         /// </summary>
-        private async Task AddPartToDatabase(CarPart part)
+        private async Task AddPartToDatabaseAsync(CarPart part, PartDialog? dialog = null)
         {
             var newId = await _dataService.AddPartAsync(part);
             if (newId > 0)
             {
                 part.Id = newId;
+
+                // Upload pending images to Cloudinary for new parts
+                if (dialog != null)
+                {
+                    try
+                    {
+                        var uploadedUrls = await dialog.UploadPendingImagesAsync(newId);
+                        if (uploadedUrls.Count > 0)
+                        {
+                            part.ImagePath = string.Join(" ", uploadedUrls);
+                            // Update the part with Cloudinary URLs
+                            await _dataService.UpdatePartAsync(part);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log error but don't fail the part creation
+                        System.Diagnostics.Debug.WriteLine($"Failed to upload images for part {newId}: {ex.Message}");
+                    }
+                }
+
                 // Set the category name for display
                 var category = Categories.FirstOrDefault(c => c.Id == part.CategoryId);
                 if (category != null)
@@ -678,7 +699,6 @@ namespace CarPartStoreApp.ViewModels
             {
                 var databaseName = databaseType == DatabaseType.Cloud ? DatabaseCloud : DatabaseLocal;
                 var switchingMessage = string.Format(this["SearchAndFilter.DatabaseSwitching"], databaseName);
-                // Console.WriteLine($"🔄 {switchingMessage}");
 
                 // Switch data service
                 _dataService = DataServiceFactory.GetDataService(databaseType);
@@ -691,13 +711,11 @@ namespace CarPartStoreApp.ViewModels
                 await LoadDataAsync();
 
                 var successMessage = string.Format(this["SearchAndFilter.DatabaseSwitchSuccess"], databaseName);
-                // Console.WriteLine($"✅ {successMessage}");
             }
             catch (Exception ex)
             {
-                var databaseName = databaseType == DatabaseType.Cloud ? DatabaseCloud : DatabaseLocal;
+                var databaseName = databaseType == DatabaseType.Cloud ? DatabaseLocal : DatabaseCloud;
                 var errorMessage = string.Format(this["SearchAndFilter.DatabaseSwitchError"], databaseName, ex.Message);
-                // Console.WriteLine($"❌ {errorMessage}");
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {

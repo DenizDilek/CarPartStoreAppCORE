@@ -822,7 +822,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Two Column Section for Basic Info -->
@@ -832,6 +831,8 @@
                     </GroupBox.Header>
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -874,6 +875,37 @@
                                       SelectedValue="{Binding Part.CategoryId}"
                                       Style="{StaticResource ModernComboBox}"/>
                         </Grid>
+
+                        <!-- Brand and Model Row -->
+                        <Grid Grid.Row="3" Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Content="{Binding LabelBrand}" Style="{StaticResource ModernLabel}"/>
+                            <TextBox Grid.Column="1" Text="{Binding Part.Brand}" Style="{StaticResource ModernTextBox}" ToolTip="{Binding ToolTipBrand}"/>
+
+                            <Label Grid.Column="2" Content="{Binding LabelModel}" Style="{StaticResource ModernLabel}"/>
+                            <TextBox Grid.Column="3" Text="{Binding Part.Model}" Style="{StaticResource ModernTextBox}"/>
+                        </Grid>
+
+                        <!-- ReleaseDate Row -->
+                        <Grid Grid.Row="4" Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Content="{Binding LabelReleaseDate}" Style="{StaticResource ModernLabel}"/>
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding Part.ReleaseDate, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+                                     Width="200"
+                                     HorizontalAlignment="Left"
+                                     Style="{StaticResource ModernTextBox}"/>
+                        </Grid>
                     </Grid>
                 </GroupBox>
 
@@ -901,46 +933,6 @@
                         <TextBlock Text="Inventory Information" Style="{StaticResource GroupBoxHeaderStyle}"/>
                     </GroupBox.Header>
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Stock and Location Row -->
-                        <Grid Grid.Row="0" Margin="0,0,0,16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Grid.Column="0" Content="{Binding LabelStockQuantity}" Style="{StaticResource ModernLabel}"/>
-                            <TextBox Grid.Column="1" Text="{Binding Part.StockQuantity}" Width="200" HorizontalAlignment="Left" Style="{StaticResource ModernTextBox}" ToolTip="{Binding ToolTipStockQuantity}"/>
-
-                            <Label Grid.Column="2" Content="{Binding LabelLocation}" Style="{StaticResource ModernLabel}"/>
-                            <TextBox Grid.Column="3" Text="{Binding Part.Location}" Style="{StaticResource ModernTextBox}" ToolTip="{Binding ToolTipLocation}"/>
-                        </Grid>
-
-                        <!-- Brand Row -->
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Grid.Column="0" Content="{Binding LabelBrand}" Style="{StaticResource ModernLabel}"/>
-                            <TextBox Grid.Column="1" Text="{Binding Part.Brand}" Style="{StaticResource ModernTextBox}" ToolTip="{Binding ToolTipBrand}"/>
-                        </Grid>
-                    </Grid>
-                </GroupBox>
-
-                <!-- Additional Details Section -->
-                <GroupBox Grid.Row="3" Style="{StaticResource ModernGroupBox}" Margin="0,0,0,16">
-                    <GroupBox.Header>
-                        <TextBlock Text="Additional Details" Style="{StaticResource GroupBoxHeaderStyle}"/>
-                    </GroupBox.Header>
-                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="140"/>
                             <ColumnDefinition Width="*"/>
@@ -948,20 +940,16 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Column="0" Content="{Binding LabelModel}" Style="{StaticResource ModernLabel}"/>
-                        <TextBox Grid.Column="1" Text="{Binding Part.Model}" Width="200" HorizontalAlignment="Left" Style="{StaticResource ModernTextBox}"/>
+                        <Label Grid.Column="0" Content="{Binding LabelStockQuantity}" Style="{StaticResource ModernLabel}"/>
+                        <TextBox Grid.Column="1" Text="{Binding Part.StockQuantity}" Width="200" HorizontalAlignment="Left" Style="{StaticResource ModernTextBox}" ToolTip="{Binding ToolTipStockQuantity}"/>
 
-                        <Label Grid.Column="2" Content="{Binding LabelReleaseDate}" Style="{StaticResource ModernLabel}"/>
-                        <DatePicker Grid.Column="3"
-                                    SelectedDate="{Binding Part.ReleaseDate}"
-                                    Width="200"
-                                    HorizontalAlignment="Left"
-                                    Style="{StaticResource ModernDatePicker}"/>
+                        <Label Grid.Column="2" Content="{Binding LabelLocation}" Style="{StaticResource ModernLabel}"/>
+                        <TextBox Grid.Column="3" Text="{Binding Part.Location}" Style="{StaticResource ModernTextBox}" ToolTip="{Binding ToolTipLocation}"/>
                     </Grid>
                 </GroupBox>
 
                 <!-- Image Section (Multiple Images Support - Up to 6) -->
-                <GroupBox Grid.Row="4" Style="{StaticResource ModernGroupBox}">
+                <GroupBox Grid.Row="3" Style="{StaticResource ModernGroupBox}">
                     <GroupBox.Header>
                         <TextBlock Text="{Binding LabelImage}" Style="{StaticResource GroupBoxHeaderStyle}"/>
                     </GroupBox.Header>
@@ -1067,7 +1055,7 @@
                 </GroupBox>
 
                 <!-- Button Section -->
-                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,24">
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,24">
                     <Button Content="{Binding ButtonSave}"
                             Width="120"
                             Height="36"

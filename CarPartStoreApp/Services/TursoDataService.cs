@@ -124,6 +124,34 @@ namespace CarPartStoreApp.Services
         }
 
         // ============================================================================
+        // HELPER METHODS
+        // ============================================================================
+
+        /// <summary>
+        /// Escapes a string value for SQL by replacing single quotes
+        /// </summary>
+        private static string EscapeSql(string? value)
+        {
+            return value?.Replace("'", "''") ?? "";
+        }
+
+        /// <summary>
+        /// Formats a DateTime for SQL storage
+        /// </summary>
+        private static string FormatDateTime(DateTime? date)
+        {
+            return date?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL";
+        }
+
+        /// <summary>
+        /// Formats a nullable int for SQL storage (returns "NULL" or the number as string)
+        /// </summary>
+        private static string FormatNullableInt(int? value)
+        {
+            return value.HasValue ? value.Value.ToString() : "NULL";
+        }
+
+        // ============================================================================
         // PUBLIC API METHODS - IDataService Implementation
         // ============================================================================
 
@@ -163,22 +191,7 @@ namespace CarPartStoreApp.Services
                 throw new InvalidOperationException($"CategoryId {part.CategoryId} does not exist in database");
             }
 
-            var partNumber = part.PartNumber?.Replace("'", "''") ?? "";
-            var name = part.Name?.Replace("'", "''") ?? "";
-            var description = part.Description?.Replace("'", "''") ?? "";
-            var location = part.Location?.Replace("'", "''") ?? "";
-            var brand = part.Brand?.Replace("'", "''") ?? "";
-            var imagePath = part.ImagePath?.Replace("'", "''") ?? "";
-            var model = part.Model?.Replace("'", "''") ?? "";
-            var createdDate = part.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss");
-            var lastUpdatedValue = part.LastUpdated.HasValue
-                ? $"'{part.LastUpdated.Value.ToString("yyyy-MM-dd HH:mm:ss")}'"
-                : "NULL";
-            var releaseYearValue = part.ReleaseDate.HasValue
-                ? part.ReleaseDate.Value.ToString()
-                : "NULL";
-
-            var sql = $"INSERT INTO Parts (PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, Brand, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated) VALUES ('{partNumber}', '{name}', '{description}', {part.CategoryId}, {part.CostPrice}, {part.StockQuantity}, '{location}', '{brand}', '{imagePath}', '{model}', {releaseYearValue}, '{createdDate}', {lastUpdatedValue})";
+            var sql = $"INSERT INTO Parts (PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, Brand, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated) VALUES ('{EscapeSql(part.PartNumber)}', '{EscapeSql(part.Name)}', '{EscapeSql(part.Description)}', {part.CategoryId}, {part.CostPrice}, {part.StockQuantity}, '{EscapeSql(part.Location)}', '{EscapeSql(part.Brand)}', '{EscapeSql(part.ImagePath)}', '{EscapeSql(part.Model)}', {FormatNullableInt(part.ReleaseDate)}, '{FormatDateTime(part.CreatedDate)}', {FormatDateTime(part.LastUpdated)})";
 
             var result = await ExecuteQueryAsync(sql, null);
 
@@ -187,19 +200,7 @@ namespace CarPartStoreApp.Services
 
         public async Task<bool> UpdatePartAsync(CarPart part)
         {
-            var partNumber = part.PartNumber?.Replace("'", "''") ?? "";
-            var name = part.Name?.Replace("'", "''") ?? "";
-            var description = part.Description?.Replace("'", "''") ?? "";
-            var location = part.Location?.Replace("'", "''") ?? "";
-            var brand = part.Brand?.Replace("'", "''") ?? "";
-            var imagePath = part.ImagePath?.Replace("'", "''") ?? "";
-            var model = part.Model?.Replace("'", "''") ?? "";
-            var lastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            var releaseYearValue = part.ReleaseDate.HasValue
-                ? part.ReleaseDate.Value.ToString()
-                : "NULL";
-
-            var sql = $"UPDATE Parts SET PartNumber = '{partNumber}', Name = '{name}', Description = '{description}', CategoryId = {part.CategoryId}, CostPrice = {part.CostPrice}, StockQuantity = {part.StockQuantity}, Location = '{location}', Brand = '{brand}', ImagePath = '{imagePath}', Model = '{model}', ReleaseYear = {releaseYearValue}, LastUpdated = '{lastUpdated}' WHERE Id = {part.Id}";
+            var sql = $"UPDATE Parts SET PartNumber = '{EscapeSql(part.PartNumber)}', Name = '{EscapeSql(part.Name)}', Description = '{EscapeSql(part.Description)}', CategoryId = {part.CategoryId}, CostPrice = {part.CostPrice}, StockQuantity = {part.StockQuantity}, Location = '{EscapeSql(part.Location)}', Brand = '{EscapeSql(part.Brand)}', ImagePath = '{EscapeSql(part.ImagePath)}', Model = '{EscapeSql(part.Model)}', ReleaseYear = {FormatNullableInt(part.ReleaseDate)}, LastUpdated = '{FormatDateTime(DateTime.Now)}' WHERE Id = {part.Id}";
 
             var result = await ExecuteQueryAsync(sql, null);
             return result.AffectedRowCount > 0;
@@ -244,15 +245,14 @@ namespace CarPartStoreApp.Services
                 @"
                     CREATE TABLE IF NOT EXISTS Parts (
                         Id INTEGER PRIMARY KEY,
-                        PartNumber TEXT NOT NULL UNIQUE,
+                        PartNumber TEXT,
                         Name TEXT NOT NULL,
                         Description TEXT,
                         CategoryId INTEGER,
                         CostPrice REAL NOT NULL DEFAULT 0,
-                        RetailPrice REAL NOT NULL DEFAULT 0,
                         StockQuantity INTEGER NOT NULL DEFAULT 0,
                         Location TEXT,
-                        Supplier TEXT,
+                        Brand TEXT,
                         ImagePath TEXT,
                         Model TEXT,
                         ReleaseYear INTEGER,
@@ -274,12 +274,10 @@ namespace CarPartStoreApp.Services
             try
             {
                 await ExecuteQueryAsync("ALTER TABLE Parts ADD COLUMN Model TEXT");
-                // Console.WriteLine("[TURSO MIGRATION] Added 'Model' column to Parts table");
             }
             catch
             {
                 // Column already exists or table structure error - safe to ignore
-                // Console.WriteLine($"[TURSO MIGRATION] 'Model' column may already exist");
             }
 
             // Migrate ReleaseDate TEXT to ReleaseYear INTEGER
@@ -287,7 +285,6 @@ namespace CarPartStoreApp.Services
             try
             {
                 await ExecuteQueryAsync("ALTER TABLE Parts ADD COLUMN ReleaseYear INTEGER");
-                // Console.WriteLine("[TURSO MIGRATION] Added 'ReleaseYear' column to Parts table");
 
                 // Migrate data from ReleaseDate to ReleaseYear (extract year from date string)
                 await ExecuteQueryAsync(@"
@@ -295,21 +292,19 @@ namespace CarPartStoreApp.Services
                     SET ReleaseYear = CAST(substr(COALESCE(ReleaseDate, '0000'), 1, 4) AS INTEGER)
                     WHERE ReleaseYear IS NULL AND ReleaseDate IS NOT NULL
                 ");
-                // Console.WriteLine("[TURSO MIGRATION] Migrated data from ReleaseDate to ReleaseYear");
 
-                // Drop old ReleaseDate column if it exists
+                // Drop old ReleaseDate, RetailPrice, Supplier columns if they exist
                 try
                 {
                     await ExecuteQueryAsync(@"
                         CREATE TABLE Parts_New AS
-                        SELECT Id, PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice,
-                               StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear,
+                        SELECT Id, PartNumber, Name, Description, CategoryId, CostPrice,
+                               StockQuantity, Location, Brand, ImagePath, Model, ReleaseYear,
                                CreatedDate, LastUpdated
                         FROM Parts
                     ");
                     await ExecuteQueryAsync("DROP TABLE Parts");
                     await ExecuteQueryAsync("ALTER TABLE Parts_New RENAME TO Parts");
-                    // Console.WriteLine("[TURSO MIGRATION] Removed old 'ReleaseDate' column from Parts table");
                 }
                 catch (Exception dropEx)
                 {
@@ -319,7 +314,6 @@ namespace CarPartStoreApp.Services
             catch
             {
                 // Column already exists or table structure error - safe to ignore
-                // Console.WriteLine($"[TURSO MIGRATION] 'ReleaseYear' column may already exist");
             }
 
             // Migration: Add UNIQUE constraint to PartNumber column
@@ -336,19 +330,18 @@ namespace CarPartStoreApp.Services
                 ");
                 await ExecuteQueryAsync("DROP TABLE IF EXISTS Parts_MigrationCheck");
 
-                // Create new table with UNIQUE constraint
+                // Create new table without UNIQUE constraint on PartNumber (without deprecated columns)
                 await ExecuteQueryAsync(@"
                     CREATE TABLE IF NOT EXISTS Parts_New (
                         Id INTEGER PRIMARY KEY,
-                        PartNumber TEXT NOT NULL UNIQUE,
+                        PartNumber TEXT,
                         Name TEXT NOT NULL,
                         Description TEXT,
                         CategoryId INTEGER,
                         CostPrice REAL NOT NULL DEFAULT 0,
-                        RetailPrice REAL NOT NULL DEFAULT 0,
                         StockQuantity INTEGER NOT NULL DEFAULT 0,
                         Location TEXT,
-                        Supplier TEXT,
+                        Brand TEXT,
                         ImagePath TEXT,
                         Model TEXT,
                         ReleaseYear INTEGER,
@@ -358,23 +351,22 @@ namespace CarPartStoreApp.Services
                     )
                 ");
 
-                // Migrate data, keeping only the first occurrence of each PartNumber
+                // Migrate all data without deduplication (PartNumber is no longer UNIQUE)
                 await ExecuteQueryAsync(@"
-                    INSERT INTO Parts_New (Id, PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated)
-                    SELECT MIN(Id) as Id, PartNumber, Name, Description, CategoryId, CostPrice, RetailPrice, StockQuantity, Location, Supplier, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated
+                    INSERT INTO Parts_New (Id, PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, Brand, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated)
+                    SELECT Id, PartNumber, Name, Description, CategoryId, CostPrice, StockQuantity, Location, Brand, ImagePath, Model, ReleaseYear, CreatedDate, LastUpdated
                     FROM Parts
-                    GROUP BY PartNumber
                 ");
 
                 // Drop old table and rename new one
                 await ExecuteQueryAsync("DROP TABLE Parts");
                 await ExecuteQueryAsync("ALTER TABLE Parts_New RENAME TO Parts");
-                // Console.WriteLine("[TURSO MIGRATION] Added UNIQUE constraint to PartNumber and removed duplicates");
+                Console.WriteLine("[TURSO MIGRATION] Removed UNIQUE constraint from PartNumber");
             }
             catch
             {
                 // Table structure may already be correct or other migration error - safe to ignore
-                // Console.WriteLine("[TURSO MIGRATION] Parts table may already have UNIQUE constraint");
+                Console.WriteLine("[TURSO MIGRATION] Parts table may already be updated (no UNIQUE constraint)");
             }
 
             // Seed categories with explicit IDs for consistency
@@ -456,7 +448,6 @@ namespace CarPartStoreApp.Services
             var request = BuildTursoRequest(sql, parameters);
 
             var jsonContent = JsonSerializer.Serialize(request, _jsonOptions);
-            // Console.WriteLine($"[TURSO DEBUG] Request to {_httpUrl}: {jsonContent}");
             var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             // Initialize query info for tracking
@@ -478,7 +469,6 @@ namespace CarPartStoreApp.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                    // Console.WriteLine($"[TURSO ERROR] HTTP {response.StatusCode}: {errorContent}");
 
                     if (_debugTrackingEnabled && queryInfo != null)
                     {
@@ -496,14 +486,12 @@ namespace CarPartStoreApp.Services
                 }
 
                 var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
-                // Console.WriteLine($"[TURSO DEBUG] Response: {responseJson}");
 
                 var tursoResponse = JsonSerializer.Deserialize<TursoResponse>(responseJson, _jsonOptions)
                     ?? throw new TursoException("Failed to deserialize Turso response");
 
                 if (tursoResponse.Results == null || tursoResponse.Results.Count == 0)
                 {
-                    // Console.WriteLine($"[TURSO ERROR] No results in response. Full JSON: {responseJson}");
 
                     if (_debugTrackingEnabled && queryInfo != null)
                     {
@@ -522,7 +510,6 @@ namespace CarPartStoreApp.Services
 
                 if (firstResult.Type != "ok" || firstResult.Response == null)
                 {
-                    // Console.WriteLine($"[TURSO ERROR] First result is not 'ok' or has no response. Type: {firstResult.Type}");
 
                     if (_debugTrackingEnabled && queryInfo != null)
                     {
@@ -537,7 +524,6 @@ namespace CarPartStoreApp.Services
 
                 if (firstResult.Response.Type != "execute" || firstResult.Response.Result == null)
                 {
-                    // Console.WriteLine($"[TURSO ERROR] Response is not 'execute' or has no result. Type: {firstResult.Response.Type}");
 
                     if (_debugTrackingEnabled && queryInfo != null)
                     {
@@ -551,7 +537,6 @@ namespace CarPartStoreApp.Services
                 }
 
                 var queryResult = firstResult.Response.Result;
-                // Console.WriteLine($"[TURSO DEBUG] Result rows: {queryResult.Rows?.Count ?? 0}, Affected: {queryResult.AffectedRowCount}");
 
                 // Capture successful query info
                 if (_debugTrackingEnabled && queryInfo != null)
@@ -698,7 +683,8 @@ namespace CarPartStoreApp.Services
         /// </summary>
         private static object ConvertToTursoValue(object? value)
         {
-            if (value == null)
+            // Handle null and DBNull as null type
+            if (value == null || value == DBNull.Value)
                 return new { type = "null", value = (string?)null };
 
             return value switch

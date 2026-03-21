@@ -30,17 +30,14 @@ public partial class App : Application
 
         // Check which database to use and display info
         var databaseType = DataServiceFactory.GetDatabaseType();
-        // Console.WriteLine($"🔧 Starting CarPartStoreApp with {databaseType}");
 
         // Initialize local database only if using SQLite (not Turso)
         if (!Data.DatabaseConfig.UseTurso())
         {
-            // Console.WriteLine("📦 Initializing local SQLite database...");
             DatabaseInitializer.Initialize();
         }
         else
         {
-            // Console.WriteLine("☁️ Using Turso cloud database...");
             // Initialize Turso database schema if needed
             var tursoDataService = new Services.TursoDataService();
             _ = Task.Run(async () =>
@@ -48,7 +45,6 @@ public partial class App : Application
                 try
                 {
                     await tursoDataService.InitializeDatabaseSchemaAsync();
-                    // Console.WriteLine("✅ Turso database schema initialized");
                 }
                 catch
                 {
@@ -76,7 +72,6 @@ public partial class App : Application
                 cloudinarySettings.ApiKey,
                 cloudinarySettings.ApiSecret);
             ServiceContainer.RegisterInstance<IImageStorageService>(imageStorageService);
-            // Console.WriteLine("🖼️ Cloudinary image storage enabled");
         }
 
         // Create data service using factory (Turso or SQLite based on config)

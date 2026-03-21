@@ -179,16 +179,16 @@ namespace CarPartStoreApp.Controllers
         {
             return new CarPart
             {
-                PartNumber = dto.PartNumber,
+                PartNumber = dto.PartNumber ?? string.Empty,
                 Name = dto.Name,
                 Description = dto.Description ?? string.Empty,
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
                 StockQuantity = dto.StockQuantity,
                 Location = dto.Location ?? string.Empty,
-                Brand = dto.Brand,
+                Brand = dto.Brand ?? string.Empty,
                 ImagePath = dto.ImagePath ?? string.Empty,
-                Model = dto.Model,
+                Model = dto.Model ?? string.Empty,
                 ReleaseDate = dto.ReleaseDate,
                 CreatedDate = DateTime.Now
             };
@@ -198,16 +198,16 @@ namespace CarPartStoreApp.Controllers
         {
             return new CarPart
             {
-                PartNumber = dto.PartNumber,
+                PartNumber = dto.PartNumber ?? string.Empty,
                 Name = dto.Name,
                 Description = dto.Description ?? string.Empty,
                 CategoryId = dto.CategoryId,
                 CostPrice = dto.CostPrice,
                 StockQuantity = dto.StockQuantity,
                 Location = dto.Location ?? string.Empty,
-                Brand = dto.Brand,
+                Brand = dto.Brand ?? string.Empty,
                 ImagePath = dto.ImagePath ?? string.Empty,
-                Model = dto.Model,
+                Model = dto.Model ?? string.Empty,
                 ReleaseDate = dto.ReleaseDate
             };
         }
